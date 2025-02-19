@@ -2,7 +2,12 @@
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        "chango" : ["Chango", 'sans-serif']
+      }
+
+    },
   },
   plugins: [],
 }
