@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import axios from "axios"
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 /**Creat and style LOGIN page*/
 const Login = () => {
@@ -7,6 +9,8 @@ const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError]  = useState(null)
+    const {login} = useAuth()
+    const navigate = useNavigate()
 
 
     // Handle submit button event
@@ -16,6 +20,13 @@ const Login = () => {
             const response = await axios.post("http://localhost:5000/api/auth/login", {email, password});
             if(response.data.success){
                 alert("Successfully login")
+                login(response.data.user)
+                localStorage.setItem("token", response.data.token)
+                if (response.data.user.role === "admin") {
+                   navigate('/admin-dashboard') 
+                } else{
+                    navigate('/employee-dashboard')
+                }
             }
 
         } catch (error) {
@@ -43,7 +54,7 @@ const Login = () => {
                         onChange={(e) => setEmail(e.target.value)} required
                         />
                     </div>
-                    <div>
+                    <div className="mb-4">
                         <label htmlFor="password" className="block text-gray-700">Password</label>
                         <input type="password" className="w-full px-3 py-2 border" placeholder="*************" 
                         onChange={(e) => setPassword(e.target.value)} required
@@ -54,13 +65,13 @@ const Login = () => {
                             <input type="checkbox" className="form-checkbox" name="" id="" />
                             <span className="ml-2 text-gray-700">Remember me</span>
                         </label>
-                        
-                    </div>
-                    <div className="mb-4">
-                        <button type="submit" className="w-full bg-blue-600 text-white py-2">Login</button>
                         <a href="#" className="text-teal-600">
                             Forgot password?
                         </a>
+                    </div>
+                    <div className="mb-4">
+                        <button type="submit" className="w-full bg-blue-600 text-white py-2">Login</button>
+
                     </div>
                 </form>
             </div>
