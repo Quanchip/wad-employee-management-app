@@ -1,26 +1,27 @@
-import React from 'react'
-import { useAuth } from '../context/authContext'
-import { useNavigate } from 'react-router-dom'
-
-
+import React, { useEffect } from 'react';
+import { useAuth } from '../context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const {user, loading} = useAuth()
-  const navigate = useNavigate()
+  const { user } = useAuth();
+  // const navigate = useNavigate();
 
-  if(loading) {
-    return <div>Loading....</div>
-  }
+  // // Redirect to login if no user
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     navigate('/login', { replace: true });
+  //   } 
+  // }, [user, loading, navigate]);
 
-  if(!user){
-    navigate('/login')
-  }
+  // if (loading) {
+  //   return <div>Loading....</div>;
+  // }
 
   return (
     <div>
-      <div>Admin Dashboard {user && user.Name}</div>
+      <div>Admin Dashboard...  {user && user.name} </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminDashboard
+export default AdminDashboard;
