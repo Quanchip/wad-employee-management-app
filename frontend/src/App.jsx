@@ -21,7 +21,7 @@ function App() {
               <RoleBaseRoutes requireRole={['admin']}>
                 <AdminDashboard />
               </RoleBaseRoutes>
-            </PrivateRoutes>
+            </PrivateRoutes> 
           } 
         />
 
