@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     profileImage: {type: String},
     createAt: {type: Date, default: Date.now},
     upDateAt: {type: Date, default: Date.now},
-})
+}, { collection: 'users', autoCreate: true });
 
 
 const User = mongoose.model("User", userSchema)

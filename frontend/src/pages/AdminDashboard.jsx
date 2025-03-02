@@ -26,7 +26,6 @@ const AdminDashboard = () => {
       <AdminSidebar /> 
         <div className="flex-1 ml-64 bg-grey-100 h-screen">
           <Navbar />  
-          <AdminSummary /> 
           <Outlet />
         </div>
 
