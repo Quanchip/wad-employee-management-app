@@ -8,9 +8,10 @@ import AdminSummary from './components/dashboard/AdminSummary.jsx'
 import DepartmentList from './components/departments/DepartmentList.jsx'
 import LeavesList from './components/leaves/LeavesList.jsx'
 import Salary from './components/Salary/Salary.jsx'
-import Employee from './components/Employee/Employee.jsx'
+import List from './components/employee/list.jsx'
 import AddDepartment from './components/departments/AddDepartment.jsx'
 import EditDepartment from './components/departments/EditDepartment.jsx'
+import Add from './components/employee/add.jsx'
 
 function App() {
   return (
@@ -37,7 +38,10 @@ function App() {
           <Route path='department/:id' element={<EditDepartment />} />
           <Route path='leaves' element={<LeavesList />} />
           <Route path='salaries' element={<Salary />} />
-          <Route path='employees' element={<Employee />} />
+
+      
+          <Route path='/admin-dashboard/employees' element={<List />} />
+          <Route path='/admin-dashboard/add-employee' element={<Add />} />
         </Route>
 
         {/* Employee Dashboard - Protected Route */}
