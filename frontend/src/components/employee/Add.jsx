@@ -28,6 +28,7 @@ const Add = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        console.log("Dữ liệu đã gửi" , departments)
 
         const formDataObj = new FormData()
         Object.keys(formData).forEach((key) => {

@@ -16,7 +16,7 @@ export const columns = [
     name: 'Action',
     selector: (row) => row.action,
   },
-]
+];
 
 export const DepartmentButtons = ({ _id, onDepartmentDelete}) => {
   const navigate = useNavigate()
@@ -60,4 +60,4 @@ export const DepartmentButtons = ({ _id, onDepartmentDelete}) => {
       </button>
     </div>
   )
-}
+};

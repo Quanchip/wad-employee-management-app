@@ -1,12 +1,12 @@
 import express from 'express'
 import authMiddleware from '../middleware/authMiddleware.js'
-import {addEmployee, upload} from '../controllers/employeeController.js'
+import {addEmployee, upload, getEmployees} from '../controllers/employeeController.js'
 
 
 const router = express.Router()
 
 //Read
-// router.get('/', authMiddleware, getDepartments)
+router.get('/', authMiddleware, getEmployees)
 //Create
 router.post('/add', authMiddleware, upload.single('image'), addEmployee)
 

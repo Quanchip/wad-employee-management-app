@@ -12,33 +12,33 @@ const AdminSidebar = () => {
             </div>
 
             <nav className="flex flex-col space-y-4 mt-4"> 
-                <NavLink to="/admin-dashboard" className= {({isActive}) => `${isActive ? "bg-teal-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                <NavLink to="/admin-dashboard" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
                     end
                     >
                     <FaTachometerAlt className="text-lg" />
                     <span>Dashboard</span>
                 </NavLink>
 
-                <NavLink to="/admin-dashboard/employees" className= {({isActive}) => `${isActive ? "bg-teal-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                <NavLink to="/admin-dashboard/employees" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
                     end
                     >
                     <FaUser className="text-lg" />
                     <span>Employee</span>
                 </NavLink> 
 
-                <NavLink to="/admin-dashboard/departments" className= {({isActive}) => `${isActive ? "bg-teal-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                <NavLink to="/admin-dashboard/departments" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
                     end>
                     <FaBuilding className="text-lg" />
                     <span>Department</span>
                 </NavLink> 
 
-                <NavLink to="/admin-dashboard/leaves" className= {({isActive}) => `${isActive ? "bg-teal-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                <NavLink to="/admin-dashboard/leaves" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
                     end>
                     <FaCalendarAlt className="text-lg" />
                     <span>Leave</span>
                 </NavLink> 
 
-                <NavLink to="/admin-dashboard/salaries" className= {({isActive}) => `${isActive ? "bg-teal-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                <NavLink to="/admin-dashboard/salaries" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
                     end>
                     <FaMoneyBillWave className="text-lg" />
                     <span>Salary</span>
