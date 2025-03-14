@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'; 
 import { fetchDepartments } from '../../utils/EmployeeHelper';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const Add = () => { 
 
+    const navigate = useNavigate();
+    
     const [departments, setDepartments] = useState([]);
 
     const [formData, setFormData] = useState({})
@@ -43,6 +46,7 @@ const Add = () => {
                 }
             })
             if (response.data.success) {
+                alert("Add employee successfully")
                 navigate("/admin-dashboard/employees")
             }
         } catch (error) {

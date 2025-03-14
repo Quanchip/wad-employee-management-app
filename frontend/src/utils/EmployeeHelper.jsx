@@ -5,30 +5,39 @@ export const columns = [
   {
     name: 'S NO',
     selector: (row) => row.sno,
+    width: "70px"
   },
   {
     name: 'Name',
     selector: (row) => row.name,
-    sortable : true
+    sortable : true,
+    width: "150px"
   },
   {
     name: 'Image',
     selector: (row) => row.profileImage,
+    width: "200px",
+    center: "true"
     
   },
   {
     name: 'Department',
     selector: (row) => row.dep_name,
+    width: "120px",
+    center: "true"
     
   },
   {
     name: 'DOB',
     selector: (row) => row.dob,
-    sortable : true
+    sortable : true,
+    width: "120px",
+    center: "true"
   },
   {
     name: 'Action',
     selector: (row) => row.action,
+    center: "true"
   },
 ];
 
@@ -63,14 +72,15 @@ export const fetchDepartments = async () => {
       <div className='flex space-x-3'>
         <button
           className='px-3 py-1 bg-teal-600 text-white'
-          onClick={() => navigate(`/admin-dashboard/department/${_id}`)}
+          onClick={() => navigate(`/admin-dashboard/employees/${Id}`)}
         >
           {' '}
           View
         </button>
   
         <button
-          className='px-3 py-1 bg-blue-600 text-white'         
+          className='px-3 py-1 bg-blue-600 text-white' 
+          onClick={() => navigate(`/admin-dashboard/employees/edit/${Id}`)}        
         >
           Edit
         </button>

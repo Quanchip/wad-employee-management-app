@@ -12,6 +12,9 @@ import List from './components/employee/list.jsx'
 import AddDepartment from './components/departments/AddDepartment.jsx'
 import EditDepartment from './components/departments/EditDepartment.jsx'
 import Add from './components/employee/add.jsx'
+import View from './components/employee/View.jsx'
+import Edit from './components/employee/Edit.jsx'
+
 
 function App() {
   return (
@@ -42,6 +45,8 @@ function App() {
       
           <Route path='/admin-dashboard/employees' element={<List />} />
           <Route path='/admin-dashboard/add-employee' element={<Add />} />
+          <Route path='/admin-dashboard/employees/:id' element={<View />} />
+          <Route path='/admin-dashboard/employees/edit/:id' element={<Edit />} />
         </Route>
 
         {/* Employee Dashboard - Protected Route */}
