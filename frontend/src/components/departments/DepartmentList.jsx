@@ -43,7 +43,7 @@ const DepartmentList = () => {
       } finally {
         setDepLoading(false)
       }
-    }
+    };
     fetchDepartments()
   }, [])
 
