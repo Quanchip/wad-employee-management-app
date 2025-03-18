@@ -109,7 +109,8 @@ export const fetchDepartments = async () => {
         </button>
         <button
           className='px-3 py-1 bg-yellow-600 text-white'         
-        >
+          onClick={() => navigate(`/admin-dashboard/employee/salary/${Id}`)} 
+         >  
           Salary
         </button>
         <button

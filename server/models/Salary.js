@@ -3,17 +3,15 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const salarySchema = new Schema(
-    {
+    { 
+        departmentId: { type: Schema.Types.ObjectId, ref: 'Department', required: true }, // Fixed
         employeeId: { type: Schema.Types.ObjectId, ref: 'Employee', required: true },
         basicSalary: { type: Number, required: true },
-        allowances: { type: Number, default: 0 },
+        allowance: { type: Number, default: 0 }, // Fixed to match frontend
         deductions: { type: Number, default: 0 },
-        netSalary: { type: Number },
         payDate: { type: Date, required: true },
-        createdAt: { type: Date, default: Date.now },
-        updatedAt: { type: Date, default: Date.now }
     },
-    { timestamps: true } // This automatically handles createdAt & updatedAt
+    { timestamps: true } // Handles createdAt & updatedAt automatically
 );
 
 const Salary = mongoose.model('Salary', salarySchema);

@@ -14,10 +14,10 @@ router.get('/add', (req, res) => {
     res.json({ success: true, message: "Salary Add API is working!" });
 });
 
-
 router.get('/:id', authMiddleware, getEmployee)
 //edit
-router.put('/:id', authMiddleware, updateEmployee)
+router.put('/:id', authMiddleware, updateEmployee) 
+
 router.get('/department/:id', authMiddleware, fetchEmployeesByDepId); 
 
 

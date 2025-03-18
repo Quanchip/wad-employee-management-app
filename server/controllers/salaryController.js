@@ -10,7 +10,7 @@ const addSalary = async (req, res) => {
             employeeId,
             basicSalary,
             allowances,
-            deductions,
+            deductions, 
             netSalary: totalSalary,
             payDate
         }) 
@@ -21,7 +21,7 @@ const addSalary = async (req, res) => {
 
         } catch (error) { 
         console.error(error) 
-        return res.status(500).json({success: false, error: 'Server Error'})
+        return res.status(500).json({success: false, error: 'Salary add server error'}) 
     }
 } 
 
