@@ -14,7 +14,7 @@ app.use(express.static('public/uploads'))
 app.use('/api/auth', authRouter)
 app.use('/api/department', departmentRouter)
 app.use('/api/employee', employeeRouter) 
-app.use('/api/salary', salaryRouter);
+app.use('/api/salary', salaryRouter)
 
 
 app.listen(process.env.PORT, () => {

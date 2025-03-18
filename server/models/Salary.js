@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const { Schema } = mongoose;
+import {Schema} from "mongoose";
 
 const salarySchema = new Schema(
     {
@@ -13,7 +13,7 @@ const salarySchema = new Schema(
         createdAt: { type: Date, default: Date.now },
         updatedAt: { type: Date, default: Date.now }
     },
-    { timestamps: true } // This automatically handles createdAt & updatedAt
+    { timestamps: true }
 );
 
 const Salary = mongoose.model('Salary', salarySchema);

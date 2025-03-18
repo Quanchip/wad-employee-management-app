@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDepartments } from '../../utils/EmployeeHelper';
+import { fetchDepartments } from '../../utils/EmployeeHelper.jsx';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import { getEmployees } from '../../utils/EmployeeHelper.jsx';
 const Add = () => {
     const [salary, setSalary] = useState({
         employeeId: "",
         basicSalary: 0,
-        allowance: 0,
+        allowances: 0,
         deductions: 0,
         payDate: "",
     });
@@ -15,7 +15,7 @@ const Add = () => {
     const [departments, setDepartments] = useState([]);
     const [employees, setEmployees] = useState([]);
     const navigate = useNavigate();
-    const { id } = useParams();
+
 
     useEffect(() => {
         const getDepartments = async () => {
@@ -25,48 +25,15 @@ const Add = () => {
         getDepartments();
     }, []);
 
+  
+
     const handleDepartment = async (e) => {
-        const departmentId = e.target.value;
-        const response = await axios.get(`http://localhost:5000/api/employee?department=${departmentId}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        });
-        setEmployees(response.data.employees);
+        const emps = await getEmployees(e.target.value)
+        setEmployees(emps);
     };
 
-    useEffect(() => {
-        const fetchEmployee = async () => {
-            try {
-                const response = await axios.get("http://localhost:5000/api/salary/add", {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-    
-                console.log("API Response:", response.data); // Debugging
-    
-                if (response.data?.success && response.data.employee) {
-                    const employee = response.data.employee;
-                    setSalary((prev) => ({
-                        ...prev,
-                        employeeId: employee.userId?._id || "",
-                        basicSalary: employee.salary || 0,
-                        allowance: employee.allowance || 0,
-                        deductions: employee.deductions || 0,
-                        payDate: employee.payDate || "",
-                    }));
-                } else {
-                    console.error("Invalid response format:", response.data);
-                }
-            } catch (error) {
-                console.error("Error fetching employee:", error);
-            }
-        };
-    
-        fetchEmployee();
-    }, []);
-    
+
+   
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -80,7 +47,7 @@ const Add = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.put(`http://localhost:5000/api/employee/${id}`, salary, {
+            const response = await axios.post(`http://localhost:5000/api/salary/add`, salary, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -98,7 +65,7 @@ const Add = () => {
 
     return (
         <>
-            {departments.length > 0 ? (
+            {departments ? (
                 <div className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md">
                     <h2 className="text-2xl font-bold mb-6">Add Salary</h2>
                     <form onSubmit={handleSubmit}>
@@ -127,14 +94,13 @@ const Add = () => {
                                 <select
                                     name="employeeId"
                                     onChange={handleChange}
-                                    value={salary.employeeId}
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                                     required
                                 >
                                     <option value="">Select Employee</option>
                                     {employees.map((emp) => (
                                         <option key={emp._id} value={emp._id}>
-                                            {emp.name}
+                                            {emp.employeeId}
                                         </option>   
                                     ))}
                                 </select>
@@ -146,7 +112,7 @@ const Add = () => {
                                 <input
                                     type="number"
                                     name="basicSalary"
-                                    value={salary.basicSalary}
+                                    // value={salary.basicSalary}
                                     onChange={handleChange}
                                     placeholder="Basic Salary"
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
@@ -159,10 +125,10 @@ const Add = () => {
                                 <label className="block text-sm font-medium text-gray-700">Allowance</label>
                                 <input
                                     type="number"
-                                    name="allowance"
-                                    value={salary.allowance}
+                                    name="allowances"
+                                    // value={salary.allowance}
                                     onChange={handleChange}
-                                    placeholder="Allowance"
+                                    placeholder="allowances"
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                                     required
                                 />
@@ -174,9 +140,9 @@ const Add = () => {
                                 <input
                                     type="number"
                                     name="deductions"
-                                    value={salary.deductions}
+                                    // value={salary.deductions}
                                     onChange={handleChange}
-                                    placeholder="Deductions"
+                                    placeholder="deductions"
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                                     required
                                 />
@@ -188,7 +154,7 @@ const Add = () => {
                                 <input
                                     type="date"
                                     name="payDate"
-                                    value={salary.payDate}
+                                    // value={salary.payDate}
                                     onChange={handleChange}
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                                     required
@@ -202,7 +168,7 @@ const Add = () => {
                                 type="submit"
                                 className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md"
                             >
-                                Edit Employee
+                                Add Employee
                             </button>
                         </div>
                     </form>

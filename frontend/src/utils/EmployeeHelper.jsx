@@ -70,14 +70,14 @@ export const fetchDepartments = async () => {
     let employees
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/employee/department/${id}`, {
+      const responnse = await axios.get(`http://localhost:5000/api/employee/department/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         }, 
       })
-      console.log(response);
-      if (response.data.success) {
-        employees = response.data.employees
+      console.log(responnse);
+      if (responnse.data.success) {
+        employees = responnse.data.employees
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
@@ -108,7 +108,8 @@ export const fetchDepartments = async () => {
           Edit
         </button>
         <button
-          className='px-3 py-1 bg-yellow-600 text-white'         
+          className='px-3 py-1 bg-yellow-600 text-white'    
+          onClick={() => navigate(`/admin-dashboard/employees/salary/${Id}`)}        
         >
           Salary
         </button>

@@ -1,4 +1,4 @@
-import Salary from '../models/Salary'; 
+import Salary from '../models/Salary.js'; 
 
 const addSalary = async (req, res) => { 
     try { 
@@ -25,4 +25,16 @@ const addSalary = async (req, res) => {
     }
 } 
 
-export {addSalary};
+const getSalary = async (req, res) => { 
+    try { 
+        const {id} = req.params
+        const salary = await Salary.find({employeeId : id}).populate('employeeId','employeeId');
+
+        return res.status(200).json({success: true, salary}) 
+        } catch (error) { 
+        console.error(error) 
+        return res.status(500).json({success: false, error: 'salary get Error'})
+    }
+} 
+
+export {addSalary, getSalary};
