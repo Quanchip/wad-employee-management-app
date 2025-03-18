@@ -7,10 +7,12 @@ const EditDepartment = () => {
   const [department, setDepartments] = useState([])
   const [depLoading, setDepLoading] = useState(false)
   const navigate  = useNavigate()
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setDepartments({ ...department, [name]: value })
   }
+
   useEffect(() => {
     const fetchDepartments = async () => {
       setDepLoading(true)
@@ -23,7 +25,7 @@ const EditDepartment = () => {
             },
           }
         )
-        console.log(response.error)
+
         if (response.data.success) {
           setDepartments(response.data.department)
         }
