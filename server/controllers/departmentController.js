@@ -10,9 +10,6 @@ const getDepartments = async(req,res) => {
 }
 
 
-
-
-
 //POST to CREATE
 const addDepartment = async (req,res) => {
  try {
