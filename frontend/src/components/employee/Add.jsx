@@ -27,7 +27,7 @@ const Add = () => {
         } else {
             setFormData((prevData) => ({...prevData, [name] : value}))
         }
-    }
+    }  
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -40,20 +40,30 @@ const Add = () => {
 
         
         try {
-            const response = await axios.post('http://localhost:5000/api/employee/add', formDataObj, {
-                headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const response = await axios.post(
+                'http://localhost:5000/api/employee/add',
+                formDataObj,
+                { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
+            ); 
+        
+            console.log("Server Response:", response.data);
+        
             if (response.data.success) {
-                alert("Add employee successfully")
-                navigate("/admin-dashboard/employees")
+                alert("Employee added successfully");
+                navigate("/admin-dashboard/employees");
             }
         } catch (error) {
-            if(error.response && !error.response.data.success) {
-                alert(error.response.data.error)
+            console.error("Error Response:", error.response ? error.response.data : error);
+            
+            // Display a meaningful error message
+            if (error.response?.data?.error?.includes("already registered")) {
+                alert("Employee already exists! Please use a different email or employee ID.");
+            } else {
+                alert(error.response?.data?.error || "Something went wrong");
             }
         }
+        
+        
     }
 
     return ( 
@@ -65,8 +75,8 @@ const Add = () => {
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
                             Name
-                        </label>
-                        <input
+                        </label> 
+                        <input 
                             type="text"
                             name="name"
                             onChange={handleChange}
