@@ -7,18 +7,6 @@ import AdminSummary from '../components/dashboard/AdminSummary';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  // const navigate = useNavigate();
-
-  // // Redirect to login if no user
-  // useEffect(() => {
-  //   if (!loading && !user) {
-  //     navigate('/login', { replace: true });
-  //   } 
-  // }, [user, loading, navigate]);
-
-  // if (loading) {
-  //   return <div>Loading....</div>;
-  // }
 
   return (
     <div className="flex"> 
