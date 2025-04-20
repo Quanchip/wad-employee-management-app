@@ -6,7 +6,7 @@ const AdminSidebar = () => {
     return ( 
         <div className="bg-gray-900 text-white h-screen w-64 fixed left-0 top-0">  
             
-            {/* ✅ Full header background green */}
+            {/*  Full header background green */}
             <div className="bg-blue-500 text-white text-center font-bold text-lg py-4">
                 Employee MS
             </div>

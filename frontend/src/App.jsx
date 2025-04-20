@@ -6,7 +6,7 @@ import PrivateRoutes from './utils/PrivateRoutes.jsx'
 import RoleBaseRoutes from './utils/RoleBaseRoutes.jsx'
 import AdminSummary from './components/dashboard/AdminSummary.jsx'
 import DepartmentList from './components/departments/DepartmentList.jsx'
-import LeavesList from './components/leaves/LeavesList.jsx'
+import LeavesList from './components/leaves/List.jsx'
 // import Salary from './components/Salary/Salary.jsx'
 import List from './components/employee/list.jsx'
 import AddDepartment from './components/departments/AddDepartment.jsx'
@@ -16,7 +16,9 @@ import View from './components/employee/View.jsx'
 import Edit from './components/employee/Edit.jsx'
 import AddSalary from './components/Salary/Add.jsx'
 import ViewSalary from './components/Salary/View.jsx'
-
+import Summary from './components/employeeDashboard/Summary.jsx'
+import AddLeave from './components/leaves/Add.jsx'
+import Setting from './components/employeeDashboard/Setting.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -43,14 +45,18 @@ function App() {
           <Route path='leaves' element={<LeavesList />} />
           <Route path='salary' element={<AddSalary />} />
 
-      
           <Route path='/admin-dashboard/employees' element={<List />} />
           <Route path='/admin-dashboard/add-employee' element={<Add />} />
           <Route path='/admin-dashboard/employees/:id' element={<View />} />
-          <Route path='/admin-dashboard/employees/edit/:id' element={<Edit />} /> 
+          <Route
+            path='/admin-dashboard/employees/edit/:id'
+            element={<Edit />}
+          />
           <Route path='/admin-dashboard/salary/add' element={<AddSalary />} />
-          <Route path='/admin-dashboard/employees/salary/:id' element={<ViewSalary />} />
-
+          <Route
+            path='/admin-dashboard/employees/salary/:id'
+            element={<ViewSalary />}
+          />
         </Route>
 
         {/* Employee Dashboard - Protected Route */}
@@ -58,12 +64,19 @@ function App() {
           path='/employee-dashboard'
           element={
             <PrivateRoutes>
-              <RoleBaseRoutes requiredRole={['employee']}>
+              <RoleBaseRoutes requiredRole={['admin','employee']}>
                 <EmployeeDashboard />
               </RoleBaseRoutes>
             </PrivateRoutes>
           }
-        />
+        >
+          <Route index element={<Summary />} />
+          <Route path="/employee-dashboard/profile/:id" element={<View/>} />
+          <Route path="/employee-dashboard/leaves/" element={<LeavesList/>} />
+          <Route path="/employee-dashboard/add-leave/" element={<AddLeave/>} />
+          <Route path="/employee-dashboard/salary/:id" element={<ViewSalary/>} />
+          <Route path="/employee-dashboard/setting" element={<Setting/>} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

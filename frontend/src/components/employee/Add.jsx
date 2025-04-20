@@ -55,7 +55,6 @@ const Add = () => {
         } catch (error) {
             console.error("Error Response:", error.response ? error.response.data : error);
             
-            // Display a meaningful error message
             if (error.response?.data?.error?.includes("already registered")) {
                 alert("Employee already exists! Please use a different email or employee ID.");
             } else {
