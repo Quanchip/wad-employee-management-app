@@ -19,6 +19,7 @@ import ViewSalary from './components/Salary/View.jsx'
 import Summary from './components/employeeDashboard/Summary.jsx'
 import AddLeave from './components/leaves/Add.jsx'
 import Setting from './components/employeeDashboard/Setting.jsx'
+import Table from './components/leaves/Table.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -42,7 +43,7 @@ function App() {
           <Route path='departments' element={<DepartmentList />} />
           <Route path='add-department' element={<AddDepartment />} />
           <Route path='department/:id' element={<EditDepartment />} />
-          <Route path='leaves' element={<LeavesList />} />
+          {/* <Route path='leaves' element={<LeavesList />} /> */}
           <Route path='salary' element={<AddSalary />} />
 
           <Route path='/admin-dashboard/employees' element={<List />} />
@@ -57,6 +58,8 @@ function App() {
             path='/admin-dashboard/employees/salary/:id'
             element={<ViewSalary />}
           />
+
+          <Route path="/admin-dashboard/leaves" element={<Table/>}></Route>
         </Route>
 
         {/* Employee Dashboard - Protected Route */}

@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/authContext";
-import { set } from "mongoose";
 
 const Setting = () => {
   const navigate = useNavigate();
