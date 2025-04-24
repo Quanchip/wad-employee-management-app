@@ -17,14 +17,14 @@ export const columns = [
     name: 'Image',
     selector: (row) => row.profileImage,
     width: "200px",
-    center: "true"
+    center: true
     
   },
   {
     name: 'Department',
     selector: (row) => row.dep_name,
     width: "120px",
-    center: "true"
+    center: true
     
   },
   {
@@ -32,12 +32,12 @@ export const columns = [
     selector: (row) => row.dob,
     sortable : true,
     width: "120px",
-    center: "true"
+    center: true
   },
   {
     name: 'Action',
     selector: (row) => row.action,
-    center: "true"
+    center: true
   },
 ];
 
@@ -115,6 +115,7 @@ export const fetchDepartments = async () => {
         </button>
         <button
           className='px-3 py-1 bg-red-600 text-white'         
+          onClick={() => navigate(`/admin-dashboard/employees/leaves/${Id}`)}
         >
           Leave
         </button>

@@ -66,6 +66,7 @@ const Add = () => {
     return (
         <>
             {departments ? (
+                <div className='p-6 bg-gray-100 min-h-screen'>
                 <div className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md">
                     <h2 className="text-2xl font-bold mb-6">Add Salary</h2>
                     <form onSubmit={handleSubmit}>
@@ -172,6 +173,7 @@ const Add = () => {
                             </button>
                         </div>
                     </form>
+                </div>
                 </div>
             ) : (
                 <div>Loading.....</div>

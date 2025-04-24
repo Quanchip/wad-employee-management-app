@@ -19,6 +19,8 @@ import ViewSalary from './components/Salary/View.jsx'
 import Summary from './components/employeeDashboard/Summary.jsx'
 import AddLeave from './components/leaves/Add.jsx'
 import Setting from './components/employeeDashboard/Setting.jsx'
+import Table from './components/leaves/Table.jsx'
+import Detail from './components/leaves/Detail.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -42,7 +44,7 @@ function App() {
           <Route path='departments' element={<DepartmentList />} />
           <Route path='add-department' element={<AddDepartment />} />
           <Route path='department/:id' element={<EditDepartment />} />
-          <Route path='leaves' element={<LeavesList />} />
+          {/* <Route path='leaves' element={<LeavesList />} /> */}
           <Route path='salary' element={<AddSalary />} />
 
           <Route path='/admin-dashboard/employees' element={<List />} />
@@ -57,6 +59,11 @@ function App() {
             path='/admin-dashboard/employees/salary/:id'
             element={<ViewSalary />}
           />
+
+          <Route path="/admin-dashboard/leaves" element={<Table/>}></Route>
+          <Route path="/admin-dashboard/leaves/:id" element={<Detail/>}></Route>
+          <Route path="/admin-dashboard/employees/leaves/:id" element={<LeavesList/>}></Route>
+          <Route path="/admin-dashboard/setting" element={<Setting/>}></Route>
         </Route>
 
         {/* Employee Dashboard - Protected Route */}
@@ -72,7 +79,7 @@ function App() {
         >
           <Route index element={<Summary />} />
           <Route path="/employee-dashboard/profile/:id" element={<View/>} />
-          <Route path="/employee-dashboard/leaves/" element={<LeavesList/>} />
+          <Route path="/employee-dashboard/leaves/:id" element={<LeavesList/>} />
           <Route path="/employee-dashboard/add-leave/" element={<AddLeave/>} />
           <Route path="/employee-dashboard/salary/:id" element={<ViewSalary/>} />
           <Route path="/employee-dashboard/setting" element={<Setting/>} />

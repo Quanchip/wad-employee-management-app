@@ -34,6 +34,7 @@ const View = () => {
     return (
 
     <>{employee ? (
+    <div className='p-6 bg-gray-50 min-h-screen'>
     <div className="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-xl">
         <h2 className="text-2xl font-bold mb-8 text-center">
             Employees Details
@@ -69,6 +70,7 @@ const View = () => {
             <p className="font-medium">{employee.maritalStatus}</p>
         </div>
       </div>
+    </div>
     </div>
     </div>
     ): <div>Loading .....</div> }</>    

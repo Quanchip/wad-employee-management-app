@@ -1,6 +1,6 @@
 import React from 'react'; 
 import { NavLink } from 'react-router-dom'; 
-import { FaTachometerAlt, FaUser, FaBuilding, FaCalendarAlt, FaMoneyBillWave } from 'react-icons/fa'; // ✅ Imported icons
+import { FaTachometerAlt, FaUser, FaBuilding, FaCalendarAlt, FaMoneyBillWave, FaAd, FaCog } from 'react-icons/fa'; // ✅ Imported icons
 
 const AdminSidebar = () => { 
     return ( 
@@ -42,6 +42,12 @@ const AdminSidebar = () => {
                     end>
                     <FaMoneyBillWave className="text-lg" />
                     <span>Salary</span>
+                </NavLink>
+
+                <NavLink to="/admin-dashboard/setting" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                    end>
+                    <FaCog />
+                    <span>Settings</span>
                 </NavLink>
             </nav>
         </div>

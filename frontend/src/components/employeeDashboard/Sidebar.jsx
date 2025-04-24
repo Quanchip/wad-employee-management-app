@@ -28,7 +28,7 @@ const Sidebar = () => {
                     <span>My profile</span>
                 </NavLink> 
 
-                <NavLink to="/employee-dashboard/leaves" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                <NavLink to={`/employee-dashboard/leaves/${user._id}`} className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
                     >
                     <FaBuilding className="text-lg" />
                     <span>Leaves</span>
@@ -42,7 +42,7 @@ const Sidebar = () => {
 
                 <NavLink to="/employee-dashboard/setting" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
                     >
-                    <FaCogs className="text-lg" />
+                    <FaCog className="text-lg" />
                     <span>Setting</span>
                 </NavLink>
             </nav>

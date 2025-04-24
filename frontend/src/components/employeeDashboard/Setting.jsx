@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/authContext";
-import { set } from "mongoose";
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -47,6 +46,7 @@ const Setting = () => {
   };
 
   return (
+    <div className='p-6 bg-gray-100 min-h-screen'>
     <div className="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md w-96">
       <h2 className="text-2xl font-bold mb-6">Change Password</h2>
       
@@ -107,6 +107,7 @@ const Setting = () => {
           Change Password
         </button>
       </form>
+    </div>
     </div>
   );
   
