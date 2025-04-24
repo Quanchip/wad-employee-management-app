@@ -63,12 +63,13 @@
         }
 
         return ( 
-            <div className='p-6'>
+            <div className='p-6 bg-gray-50 min-h-screen'>
+            <div className='p-6' >
                 <div className='text-center'>
                     <h3 className='text-2xl font-bold'>Manage Employee</h3>
                 </div>
-
-                <div className='flex justify-between items-center my-4'>
+            
+                <div className='flex justify-between items-center my-4 '>
                     <input
                     type='text'
                     placeholder='Search by Department Name'
@@ -86,6 +87,7 @@
                     <DataTable columns={columns} data={filteredEmployee} pagination/>
                 </div>
 
+            </div>
             </div>
         )
     } 
