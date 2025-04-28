@@ -68,7 +68,7 @@ const View = () => {
         
           {filteredSalaries.length > 0 ? (
             <table className="w-full text-sm text-left text-gray-500 mt-6">
-              <thead className="text-xs text-whtie uppercase bg-gray-50 border border-gray-200">
+              <thead className="text-xs text-grey-700 uppercase bg-gray-50 border border-gray-200">
                 <tr>
                   <th className="px-6 py-3">SNO</th>
                   <th className="px-6 py-3">Emp ID</th>
@@ -83,7 +83,7 @@ const View = () => {
                 {filteredSalaries.map((salary) => (
                   <tr
                     key={salary._id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-white"
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                   >
                     <td className="px-6 py-3">{sno++}</td>
               
