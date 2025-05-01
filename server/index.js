@@ -7,6 +7,7 @@ import connectToDatabase from './db/db.js'
 import salaryRouter from './routes/salary.js'
 import leaveRoute from './routes/leave.js'
 import settingRoute from './routes/setting.js'
+import dashboardRouter from './routes/dashboard.js'
 connectToDatabase()
 const app = express();
 app.use(cors());
@@ -18,6 +19,7 @@ app.use('/api/employee', employeeRouter)
 app.use('/api/salary', salaryRouter)
 app.use('/api/leave', leaveRoute)
 app.use('/api/setting', settingRoute)
+app.use('/api/dashboard', dashboardRouter)
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on ${process.env.PORT}`)
 })
