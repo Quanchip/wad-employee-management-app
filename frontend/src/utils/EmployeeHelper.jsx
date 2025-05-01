@@ -90,7 +90,6 @@ export const fetchDepartments = async () => {
 
   export const EmployeeButtons = ({ Id }) => {
     const navigate = useNavigate();
-
     return (
       <div className='flex space-x-3'>
         <button
