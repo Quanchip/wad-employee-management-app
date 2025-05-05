@@ -21,6 +21,8 @@ import AddLeave from './components/leaves/Add.jsx'
 import Setting from './components/employeeDashboard/Setting.jsx'
 import Table from './components/leaves/Table.jsx'
 import Detail from './components/leaves/Detail.jsx'
+import Attendance from './components/attendance/Attendance.jsx' 
+import AttendanceReport from './components/attendance/AttendanceReport.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -63,7 +65,10 @@ function App() {
           <Route path="/admin-dashboard/leaves" element={<Table/>}></Route>
           <Route path="/admin-dashboard/leaves/:id" element={<Detail/>}></Route>
           <Route path="/admin-dashboard/employees/leaves/:id" element={<LeavesList/>}></Route>
-          <Route path="/admin-dashboard/setting" element={<Setting/>}></Route>
+          <Route path="/admin-dashboard/setting" element={<Setting/>}></Route> 
+          <Route path="/admin-dashboard/attendance" element={<Attendance/>}></Route>  
+          <Route path="/admin-dashboard/attendance-report" element={<AttendanceReport/>}></Route>
+
         </Route>
 
         {/* Employee Dashboard - Protected Route */}

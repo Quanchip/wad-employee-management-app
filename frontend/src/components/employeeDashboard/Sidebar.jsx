@@ -38,6 +38,12 @@ const Sidebar = () => {
                     >
                     <FaCalendarAlt className="text-lg" />
                     <span>Salary</span>
+                </NavLink>   
+
+                <NavLink to={`/employee-dashboard/attendance`} className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                    >
+                    <FaCalendarAlt className="text-lg" />
+                    <span>Attendance</span>
                 </NavLink> 
 
                 <NavLink to="/employee-dashboard/setting" className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
