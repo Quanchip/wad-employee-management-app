@@ -1,72 +1,77 @@
 import React, { useState, useEffect } from 'react'; 
 import { Link } from 'react-router-dom';
-import { columns, EmployeeButtons } from '../../utils/EmployeeHelper';
+import { columns, AttendanceHelper } from '../../utils/AttendenceHelper';
 import DataTable from 'react-data-table-component'
 import axios from 'axios';
 
 
-const List = () => { 
+const Attendance = () => { 
 
-    const [employees, setEmployees] = useState([])
-    const [emploading, setEmpLoading] = useState(false)
-    const [filteredEmployee, setFilteredEmployees] = useState([])
+    const [attendance, setAttendance] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [filterAttendance, setFilterAttendance] = useState([])
+
+    const fetchAttendance = async () => {
+        setLoading(true)
+    try {
+        const response = await axios.get('http://localhost:5000/api/attendance', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        })
+
+        console.log("API Response:", response.data);
+
+
+        if (response.data.success) {
+        let sno = 1
+        const data = response.data.attendance.map((att) => ({
+            employeeId: att.employeeId.employeeId,
+            sno: sno++,
+            department: att.employeeId.department.dep_name,
+            name: att.userId.name,
+            dob: new Date(emp.dob).toLocaleDateString(),
+           
+            action: (
+            <AttendanceHelper status={att.employeeId.employeeId} /> 
+            // fix this place
+            ),
+        }))
+        setAttendance(data)
+        setFilterAttendance(data)
+
+        }
+    } catch (error) {
+        if (error.response && !error.response.data.success) {
+        alert(error.response.data.error)
+        }
+    } finally {
+        setLoading(false)
+    }
+    };
 
     useEffect(() => {
-        const fetchEmployees = async () => {
-            setEmpLoading(true)
-        try {
-            const response = await axios.get('http://localhost:5000/api/employee', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            })
-
-            console.log("API Response:", response.data);
-
-
-            if (response.data.success) {
-            let sno = 1
-            const data = response.data.employees.map((emp) => ({
-                _id: emp._id,
-                sno: sno++,
-                dep_name: emp.department.dep_name,
-                name: emp.userId.name,
-                dob: new Date(emp.dob).toLocaleDateString(),
-                profileImage: <img width={300}  
-                                className='rounded-full object-cover'
-                                style={{ width: "150px", height: "150px" }}
-                                src={`http://localhost:5000/${emp.userId.profileImage}`}/> ,
-                action: (
-                <EmployeeButtons Id={emp._id} />
-                ),
-            }))
-            setEmployees(data)
-            setFilteredEmployees(data)
-
-            }
-        } catch (error) {
-            if (error.response && !error.response.data.success) {
-            alert(error.response.data.error)
-            }
-        } finally {
-            setEmpLoading(false)
-        }
-        };
-        fetchEmployees()
-    }, [])
+        
+        fetchAttendance();
+    }, []) 
+    //space
 
     const handleFilter = (e) => {
-        const records = employees.filter((emp) => (
-            emp.name.toLowerCase().includes(e.target.value.toLowerCase())
+        const records = attendance.filter((emp) => (
+            emp.employeeId.employeeId.toLowerCase().includes(e.target.value.toLowerCase())
         ))
-        setFilteredEmployees(records)
+        setFilterAttendance(records)
     }
-
+     
+    if(!filterAttendance) { 
+        return <div>Loading ... </div>
+    }
+    
     return ( 
         <div className='p-6 bg-gray-50 min-h-screen'>
         <div className='p-6' >
             <div className='text-center'>
-                <h3 className='text-2xl font-bold'>Manage Employee</h3>
+                <h3 className='text-2xl font-bold'>Manage Attendance</h3>
             </div>
         
             <div className='flex justify-between items-center my-4 '>
@@ -80,7 +85,7 @@ const List = () => {
                 to='/admin-dashboard/add-employee'
                 className='px-4 py-2 bg-teal-600 rounded-lg text-white hover:bg-teal-700 transition'
                 >
-                Add New Employee
+                Add New Attendance
                 </Link>
             </div>
             <div>
@@ -92,4 +97,4 @@ const List = () => {
     )
 } 
 
-export default List
+export default Attendance
