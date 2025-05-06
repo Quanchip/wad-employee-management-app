@@ -75,13 +75,17 @@ const addEmployee = async (req, res) => {
 
 const getEmployees = async (req, res) => {
     try {
-        const employees = await Employee.find().populate('userId', {password: 0}).populate("department")
-        return res.status(200).json({success:true, employees})
-     } catch (error) {
-        return res.status(500).json({success:false, error:"Error server get employees"})
-     }
-}
-
+      const employees = await Employee.find()
+        .populate('userId', '-password') // also good to exclude password
+        .populate('department');
+  
+      res.status(200).json({ success: true, employees });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: 'Server error' });
+    }
+  };
+  
 
 const getEmployee = async (req, res) => {
     const {id} = req.params;
