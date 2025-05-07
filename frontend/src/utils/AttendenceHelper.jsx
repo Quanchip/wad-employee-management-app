@@ -1,44 +1,44 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 
 // Columns for Attendance Table
 export const columns = [
   {
-    name: 'S NO',
+    name: "S NO",
     selector: (row) => row.sno,
     width: "70px",
   },
   {
-    name: 'Name',
+    name: "Name",
     selector: (row) => row.name,
     sortable: true,
     width: "150px",
   },
   {
-    name: 'Emp ID',
+    name: "Emp ID",
     selector: (row) => row.employeeId,
     sortable: true,
     width: "150px",
   },
   {
-    name: 'Department',
+    name: "Department",
     selector: (row) => row.department,
     width: "120px",
     center: true,
   },
   {
-    name: 'Action',
+    name: "Action",
     selector: (row) => row.action,
     center: true,
   },
 ];
 
 // AttendanceHelper Component
-export const AttendanceHelper = ({ status, employeeId }) => {
+export const AttendanceHelper = ({ status, employeeId, statusChange }) => {
   const markEmployee = async (status, employeeId) => {
     try {
       const response = await axios.put(
-        `https://localhost:5000/api/attendance/update/${employeeId}`,
+        `http://localhost:5000/api/attendance/update/${employeeId}`, // Changed to http
         { status },
         {
           headers: {
@@ -46,10 +46,22 @@ export const AttendanceHelper = ({ status, employeeId }) => {
           },
         }
       );
-      console.log("Attendance updated:", response.data);
-      // Optionally, update UI or notify parent
+
+      if (response.data.success) {
+        statusChange();
+      } else {
+        console.error("Update failed:", response.data.error);
+      }
     } catch (error) {
-      console.error("Error updating attendance:", error);
+      console.error("Error updating attendance:", error.message);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error setting up request:", error.message);
+      }
     }
   };
 
@@ -60,7 +72,7 @@ export const AttendanceHelper = ({ status, employeeId }) => {
           <button
             className="px-4 py-2 bg-green-500 text-white rounded"
             onClick={() => markEmployee("Present", employeeId)}
-          >
+          >  
             Present
           </button>
           <button

@@ -8,6 +8,9 @@ const Attendance = () => {
     const [attendance, setAttendance] = useState([]);
     const [loading, setLoading] = useState(false);
     const [filterAttendance, setFilterAttendance] = useState([]);
+    const statusChange = () => { 
+        fetchAttendance(); 
+    }
 
     const fetchAttendance = async () => {
         setLoading(true);
@@ -31,7 +34,7 @@ const Attendance = () => {
                         name: emp.name || 'N/A',
                         dob: emp.dob ? new Date(emp.dob).toLocaleDateString() : 'N/A',
                         department: dept.name || 'N/A',
-                        action: <AttendanceHelper status={att.status} employeeId={att.employeeId.employeeId} />,
+                        action: <AttendanceHelper status={att.status} employeeId={att.employeeId.employeeId} statusChange={statusChange} />,
                     };
                 });
 
