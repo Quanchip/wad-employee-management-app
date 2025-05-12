@@ -1,3 +1,4 @@
+
 import Attendance from "../models/Attendance.js";
 import Employee from "../models/Employee.js";
 
@@ -92,3 +93,4 @@ const attendanceReport = async (req, res) => {
 };
 
 export { getAttendance, updateAttendance, attendanceReport };
+

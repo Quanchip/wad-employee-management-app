@@ -1,3 +1,4 @@
+
 import express from 'express'
 import cors from 'cors'
 import authRouter from './routes/auth.js'
@@ -10,9 +11,15 @@ import attendanceRouter from './routes/attendance.js'
 import settingRoute from './routes/setting.js'
 import dashboardRouter from './routes/dashboard.js' 
 connectToDatabase()
+
 const app = express();
-app.use(cors());
+
+// Configure CORS to allow requests from the frontend
+app.use(cors({ origin: 'http://localhost:5173' }));
+
+// Parse JSON request bodies
 app.use(express.json());
+
 app.use(express.static('public/uploads'))
 app.use('/api/auth', authRouter)
 app.use('/api/department', departmentRouter)
@@ -25,3 +32,4 @@ app.use('/api/attendance', attendanceRouter)
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on ${process.env.PORT}`)
 })
+

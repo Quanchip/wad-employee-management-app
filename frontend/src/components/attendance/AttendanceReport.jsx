@@ -48,11 +48,12 @@ const AttendanceReport = () => {
 
   useEffect(() => {
     fetchReport();
-  }, [dateFilter, skip]); // Added skip to the dependency array to refetch when pagination changes
+  }, [dateFilter, skip]);
 
   const handleLoadmore = () => { 
     setSkip((prevSkip) => prevSkip + limit); 
   }
+
   return (
     <div>
       <h2 className="text-center text-2xl font-bold">Attendance Report</h2>
@@ -66,8 +67,7 @@ const AttendanceReport = () => {
           onChange={(e) =>{
             setDateFilter(e.target.value);
             setSkip(0); 
-          }
-          }
+          }}
         />
       </div>
 
@@ -116,7 +116,8 @@ const AttendanceReport = () => {
           </div>
         ))
       )} 
-      <button className='px-4 py-2 border bg-gray-100 text-lg font-semibold' onClick={handleLoadmore}></button>
+
+      <button className='px-4 py-2 border bg-gray-100 text-lg font-semibold' onClick={handleLoadmore}>Load More</button>
     </div>
   );
 };

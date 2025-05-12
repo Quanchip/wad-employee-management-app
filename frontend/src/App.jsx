@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
@@ -23,15 +24,13 @@ import Table from './components/leaves/Table.jsx'
 import Detail from './components/leaves/Detail.jsx'
 import Attendance from './components/attendance/Attendance.jsx' 
 import AttendanceReport from './components/attendance/AttendanceReport.jsx'
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect to Login if user is not authenticated */}
         <Route path='/' element={<Navigate to='/login' replace />} />
         <Route path='/login' element={<Login />} />
-
-        {/* Admin Dashboard - Nested Routes */}
         <Route
           path='/admin-dashboard'
           element={
@@ -46,22 +45,14 @@ function App() {
           <Route path='departments' element={<DepartmentList />} />
           <Route path='add-department' element={<AddDepartment />} />
           <Route path='department/:id' element={<EditDepartment />} />
-          {/* <Route path='leaves' element={<LeavesList />} /> */}
           <Route path='salary' element={<AddSalary />} />
-
           <Route path='/admin-dashboard/employees' element={<List />} />
           <Route path='/admin-dashboard/add-employee' element={<Add />} />
           <Route path='/admin-dashboard/employees/:id' element={<View />} />
-          <Route
-            path='/admin-dashboard/employees/edit/:id'
-            element={<Edit />}
-          />
+          <Route path='/admin-dashboard/employees/edit/:id' element={<Edit />} />
           <Route path='/admin-dashboard/salary/add' element={<AddSalary />} />
-          <Route
-            path='/admin-dashboard/employees/salary/:id'
-            element={<ViewSalary />}
-          />
 
+          <Route path='/admin-dashboard/employees/salary/:id' element={<ViewSalary />}/>
           <Route path="/admin-dashboard/leaves" element={<Table/>}></Route>
           <Route path="/admin-dashboard/leaves/:id" element={<Detail/>}></Route>
           <Route path="/admin-dashboard/employees/leaves/:id" element={<LeavesList/>}></Route>
@@ -69,29 +60,28 @@ function App() {
           <Route path="/admin-dashboard/attendance" element={<Attendance/>}></Route>  
           <Route path="/admin-dashboard/attendance-report" element={<AttendanceReport/>}></Route>
 
-        </Route>
 
-        {/* Employee Dashboard - Protected Route */}
+        </Route>
         <Route
           path='/employee-dashboard'
           element={
             <PrivateRoutes>
-              <RoleBaseRoutes requiredRole={['admin','employee']}>
+              <RoleBaseRoutes requiredRole={['admin', 'employee']}>
                 <EmployeeDashboard />
               </RoleBaseRoutes>
             </PrivateRoutes>
           }
         >
           <Route index element={<Summary />} />
-          <Route path="/employee-dashboard/profile/:id" element={<View/>} />
-          <Route path="/employee-dashboard/leaves/:id" element={<LeavesList/>} />
-          <Route path="/employee-dashboard/add-leave/" element={<AddLeave/>} />
-          <Route path="/employee-dashboard/salary/:id" element={<ViewSalary/>} />
-          <Route path="/employee-dashboard/setting" element={<Setting/>} />
+          <Route path="/employee-dashboard/profile/:id" element={<View />} />
+          <Route path="/employee-dashboard/leaves/:id" element={<LeavesList />} />
+          <Route path="/employee-dashboard/add-leave/" element={<AddLeave />} />
+          <Route path="/employee-dashboard/salary/:id" element={<ViewSalary />} />
+          <Route path="/employee-dashboard/setting" element={<Setting />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

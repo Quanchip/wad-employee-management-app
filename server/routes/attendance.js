@@ -1,3 +1,4 @@
+
 import express from 'express' ;
 import { attendanceReport, getAttendance, updateAttendance } from '../controllers/attendanceController.js';  
 import authMiddleware from '../middleware/authMiddleware.js'
@@ -10,6 +11,7 @@ router.put('/update/:employeeId', authMiddleware, updateAttendance)
 router.put('/report', authMiddleware, attendanceReport)
 
 export default router; 
+
 
 
 
