@@ -1,8 +1,20 @@
-import express from 'express';
-const router = express.Router();
-import { markAttendance, getAttendanceReport } from '../controllers/attendanceController';
 
-router.post('/', markAttendance);
-router.get('/report', getAttendanceReport);
+import express from 'express' ;
+import { attendanceReport, getAttendance, updateAttendance } from '../controllers/attendanceController.js';  
+import authMiddleware from '../middleware/authMiddleware.js'
+import defaultAttendance from '../middleware/defaultAttendance.js'
 
-export default router;
+const router = express.Router();  
+
+router.get('/', authMiddleware, defaultAttendance, getAttendance) 
+router.put('/update/:employeeId', authMiddleware, updateAttendance)
+router.put('/report', authMiddleware, attendanceReport)
+
+export default router; 
+
+
+
+
+
+
+

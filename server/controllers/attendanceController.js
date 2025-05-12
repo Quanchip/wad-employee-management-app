@@ -1,40 +1,96 @@
-import Attendance from '../db/models/Attendance.js';
-import Employee from '../db/models/Employee.js';
 
-export const markAttendance = async (req, res) => {
+import Attendance from "../models/Attendance.js";
+import Employee from "../models/Employee.js";
+
+// GET Today's Attendance
+const getAttendance = async (req, res) => {
   try {
-    const { employeeId, date, status } = req.body;
-    const employee = await Employee.findOne({ employeeId });
-    if (!employee) return res.status(404).json({ message: 'Employee not found' });
+    const date = new Date().toISOString().split("T")[0];
 
-    const attendance = new Attendance({
-      employeeId,
-      employeeName: employee.name,
-      department: employee.department,
-      date,
-      status,
+    const attendance = await Attendance.find({ date }).populate({
+      path: "employeeId",
+      populate: {
+        path: "department",
+        select: "userId name",
+      },
     });
-    await attendance.save();
-    res.status(201).json(attendance);
+
+    res.status(200).json({ success: true, message: attendance });
   } catch (error) {
-    res.status(500).json({ message: 'Error marking attendance' });
+    console.error("Attendance fetch error:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const getAttendanceReport = async (req, res) => {
+// UPDATE Attendance for a specific employee and date
+const updateAttendance = async (req, res) => {
   try {
-    const { date, page = 1 } = req.query;
-    const limit = 5; // Rows per page
-    const skip = (page - 1) * limit;
+    const { employeeId } = req.params;
+    const { status } = req.body;
+    const date = new Date().toISOString().split("T")[0];
 
-    const records = await Attendance.find({ date })
-      .skip(skip)
-      .limit(limit);
-    const totalRecords = await Attendance.countDocuments({ date });
-    const totalPages = Math.ceil(totalRecords / limit);
+    const employee = await Employee.findOne({ employeeId });
 
-    res.json({ records, totalPages });
+    if (!employee) {
+      return res.status(404).json({ success: false, message: "Employee not found" });
+    }
+
+    const attendance = await Attendance.findOneAndUpdate(
+      { employeeId: employee._id, date },
+      { status },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({ success: true, attendance });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching report' });
+    console.error("Attendance update error:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// ATTENDANCE REPORT with optional date, limit, and skip (pagination)
+const attendanceReport = async (req, res) => {
+  try {
+    const { date, limit = 5, skip = 0 } = req.query;
+    const query = {};
+
+    if (date) {
+      query.date = date;
+    }
+
+    const attendanceData = await Attendance.find(query)
+      .populate({
+        path: "employeeId",
+        populate: [
+          { path: "department", select: "name" },
+          { path: "userId", select: "name email" },
+        ],
+      })
+      .sort({ date: -1 })
+      .limit(parseInt(limit))
+      .skip(parseInt(skip));
+
+    const groupData = attendanceData.reduce((result, record) => {
+      if (!result[record.date]) {
+        result[record.date] = [];
+      }
+
+      result[record.date].push({
+        employeeId: record.employeeId.employeeId,
+        employeeName: record.employeeId.userId.name,
+        departmentName: record.employeeId.department.name,
+        status: record.status || "Not Marked",
+      });
+
+      return result;
+    }, {});
+
+    return res.status(201).json({ success: true, groupData });
+  } catch (error) {
+    console.error("Attendance report error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { getAttendance, updateAttendance, attendanceReport };
+

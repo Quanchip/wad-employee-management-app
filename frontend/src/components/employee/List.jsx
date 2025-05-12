@@ -29,17 +29,20 @@
                 const data = response.data.employees.map((emp) => ({
                     _id: emp._id,
                     sno: sno++,
-                    dep_name: emp.department.dep_name,
-                    name: emp.userId.name,
+                    dep_name: emp.department ? emp.department.dep_name : 'N/A',
+                    name: emp.userId?.name ?? 'N/A',
                     dob: new Date(emp.dob).toLocaleDateString(),
-                    profileImage: <img width={300}  
-                                    className='rounded-full object-cover'
-                                    style={{ width: "150px", height: "150px" }}
-                                    src={`http://localhost:5000/${emp.userId.profileImage}`}/> ,
-                    action: (
-                    <EmployeeButtons Id={emp._id} />
+                    profileImage: (
+                      <img
+                        className='rounded-full object-cover'
+                        style={{ width: '150px', height: '150px' }}
+                        src={`http://localhost:5000/${emp.userId?.profileImage ?? 'default.png'}`}
+                        alt="profile"
+                      />
                     ),
-                }))
+                    action: <EmployeeButtons Id={emp._id} />,
+                  }))
+                  
                 setEmployees(data)
                 setFilteredEmployees(data)
 
