@@ -21,23 +21,33 @@ const Attendance = () => {
                 },
             });
 
-            console.log("API Response:", response.data);
+            console.log("Full API Response:", response.data);
+            console.log("First attendance record:", response.data.message[0]);
+            console.log("Employee data:", response.data.message[0]?.employeeId);
 
             if (response.data.success) {
                 let sno = 1;
                 const data = response.data.message.map((att) => {
                     const emp = att.employeeId || {};
                     const dept = emp.department || {};
+                    
+                    // console.log("Processing employee:", emp);
+                    // console.log("Department data:", dept);
+
+                    // console.log("att:", att);
+                    // console.log("att.employeeId:", att.employeeId);
+                    // console.log("att.employeeId.department:", dept.dep_name);
 
                     return {
                         sno: sno++,
-                        name: emp.name || 'N/A',
-                        dob: emp.dob ? new Date(emp.dob).toLocaleDateString() : 'N/A',
-                        department: dept.name || 'N/A',
-                        action: <AttendanceHelper status={att.status} employeeId={att.employeeId.employeeId} statusChange={statusChange} />,
+                        name: att.employeeId.userId.name || 'No Name',
+                        employeeId: att.employeeId.employeeId || 'N/A',
+                        department: att.employeeId.department.dep_name || 'N/A',
+                        action: <AttendanceHelper status={att.status} employeeId={att.employeeId._id} statusChange={statusChange} />,
                     };
                 });
 
+                console.log("Processed data:", data);
                 setAttendance(data);
                 setFilterAttendance(data);
             }
@@ -56,7 +66,8 @@ const Attendance = () => {
     const handleFilter = (e) => {
         const keyword = e.target.value.toLowerCase();
         const records = attendance.filter((emp) => 
-            emp.employeeId.toLowerCase().includes(keyword)
+            emp.name.toLowerCase().includes(keyword) || 
+            emp.department.toLowerCase().includes(keyword)
         );
         setFilterAttendance(records);
     };
@@ -71,7 +82,7 @@ const Attendance = () => {
                 <div className='flex justify-between items-center my-4'>
                     <input
                         type='text'
-                        placeholder='Search by Department Name'
+                        placeholder='Search by Name or Department'
                         className='px-4 py-2 border rounded-lg w-1/3 focus:ring-2 focus:ring-blue-500 focus:outline-none'
                         onChange={handleFilter}
                     /> 

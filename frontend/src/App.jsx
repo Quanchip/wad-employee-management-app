@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
@@ -24,6 +23,8 @@ import Table from './components/leaves/Table.jsx'
 import Detail from './components/leaves/Detail.jsx'
 import Attendance from './components/attendance/Attendance.jsx' 
 import AttendanceReport from './components/attendance/AttendanceReport.jsx'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -78,8 +79,10 @@ function App() {
           <Route path="/employee-dashboard/add-leave/" element={<AddLeave />} />
           <Route path="/employee-dashboard/salary/:id" element={<ViewSalary />} />
           <Route path="/employee-dashboard/setting" element={<Setting />} />
+
         </Route>
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 }

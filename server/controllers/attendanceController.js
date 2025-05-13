@@ -9,10 +9,10 @@ const getAttendance = async (req, res) => {
 
     const attendance = await Attendance.find({ date }).populate({
       path: "employeeId",
-      populate: {
-        path: "department",
-        select: "userId name",
-      },
+      populate: [
+        {path: "department", select: "dep_name"},
+        { path: "userId", select: "name" }
+      ],
     });
 
     res.status(200).json({ success: true, message: attendance });
@@ -29,7 +29,7 @@ const updateAttendance = async (req, res) => {
     const { status } = req.body;
     const date = new Date().toISOString().split("T")[0];
 
-    const employee = await Employee.findOne({ employeeId });
+    const employee = await Employee.findById(employeeId);
 
     if (!employee) {
       return res.status(404).json({ success: false, message: "Employee not found" });
@@ -62,7 +62,7 @@ const attendanceReport = async (req, res) => {
       .populate({
         path: "employeeId",
         populate: [
-          { path: "department", select: "name" },
+          { path: "department", select: "dep_name" },
           { path: "userId", select: "name email" },
         ],
       })
@@ -78,7 +78,7 @@ const attendanceReport = async (req, res) => {
       result[record.date].push({
         employeeId: record.employeeId.employeeId,
         employeeName: record.employeeId.userId.name,
-        departmentName: record.employeeId.department.name,
+        departmentName: record.employeeId.department.dep_name,
         status: record.status || "Not Marked",
       });
 

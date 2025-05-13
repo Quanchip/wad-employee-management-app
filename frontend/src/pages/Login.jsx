@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 import axios from "axios"
 import { useAuth } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 /**Creat and style LOGIN page*/
 const Login = () => {
@@ -19,7 +20,7 @@ const Login = () => {
         try {
             const response = await axios.post("http://localhost:5000/api/auth/login", {email, password});
             if(response.data.success){
-                alert("Successfully login")
+                toast.success("Successfully login")
                 login(response.data.user)
                 localStorage.setItem("token", response.data.token)
                 if (response.data.user.role === "admin") {

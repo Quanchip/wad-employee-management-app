@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', authMiddleware, defaultAttendance, getAttendance) 
 router.put('/update/:employeeId', authMiddleware, updateAttendance)
-router.put('/report', authMiddleware, attendanceReport)
+router.get('/report', authMiddleware, attendanceReport)
 
 export default router; 
 

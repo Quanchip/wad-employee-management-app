@@ -95,12 +95,13 @@ const AttendanceReport = () => {
               <tbody>
                 {records && records.length > 0 ? (
                   records.map((record, idx) => (
+                    
                     <tr key={`${date}-${idx}`} className="text-center border-t">
                       <td className="border p-2">{dateIndex * limit + idx + 1}</td>
                       <td className="border p-2">{date}</td>
                       <td className="border p-2">{record.employeeId || 'N/A'}</td>
                       <td className="border p-2">{record.employeeName || 'N/A'}</td>
-                      <td className="border p-2">{record.departmentName || 'N/A'}</td>
+                      <td className="border p-2">{record.departmentName  || 'N/A'}</td>
                       <td className="border p-2">{record.status || 'N/A'}</td>
                     </tr>
                   ))
