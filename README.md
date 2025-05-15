@@ -52,6 +52,8 @@ II . Open the Github Desktop and open the visual studio code
 
 
 Let's overview the website a little bit first:  
+
+
 This is the interface of the website, it has two field: Email field and password field. Now I log in into the email first: 
 ![image](https://github.com/user-attachments/assets/14c6d28b-741f-4f38-84e7-03da2af6855f)
 
