@@ -26,6 +26,8 @@ import AttendanceReport from './components/attendance/AttendanceReport.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import AddTask from "./components/task/AddTask.jsx";
+import TaskList from "./components/task/TaskList.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -60,8 +62,9 @@ function App() {
           <Route path="/admin-dashboard/setting" element={<Setting/>}></Route> 
           <Route path="/admin-dashboard/attendance" element={<Attendance/>}></Route>  
           <Route path="/admin-dashboard/attendance-report" element={<AttendanceReport/>}></Route>
-
-
+          
+          <Route path='add-task' element={<AddTask />} />
+          <Route path='tasks' element={<TaskList />} />
         </Route>
         <Route
           path='/employee-dashboard'

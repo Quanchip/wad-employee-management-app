@@ -10,6 +10,7 @@ import leaveRoute from './routes/leave.js'
 import attendanceRouter from './routes/attendance.js'
 import settingRoute from './routes/setting.js'
 import dashboardRouter from './routes/dashboard.js' 
+import taskRouter from './routes/task.js'
 connectToDatabase()
 
 const app = express();
@@ -29,6 +30,7 @@ app.use('/api/leave', leaveRoute)
 app.use('/api/setting', settingRoute)
 app.use('/api/dashboard', dashboardRouter) 
 app.use('/api/attendance', attendanceRouter)
+app.use('/api/task', taskRouter)
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on ${process.env.PORT}`)
 })
