@@ -30,6 +30,8 @@ import AddTask from "./components/task/AddTask.jsx";
 import TaskList from "./components/task/TaskList.jsx";
 import EditTask from './components/task/EditTask.jsx'
 import AssignTask from './components/task/AssignTask.jsx'
+import ViewTask from './components/task/ViewTask.jsx'
+import TaskListEmployee from './components/task/TaskListEmployee.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -69,6 +71,7 @@ function App() {
           <Route path='tasks' element={<TaskList />} />
           <Route path='task/:id' element={<EditTask />} />
           <Route path='task/assign/:id' element={<AssignTask />} />
+          <Route path='task/view/:id' element={<ViewTask   />} />
         </Route>
         <Route
           path='/employee-dashboard'
@@ -86,6 +89,7 @@ function App() {
           <Route path="/employee-dashboard/add-leave/" element={<AddLeave />} />
           <Route path="/employee-dashboard/salary/:id" element={<ViewSalary />} />
           <Route path="/employee-dashboard/setting" element={<Setting />} />
+          <Route path="/employee-dashboard/task/:id" element={<TaskListEmployee />} />
 
         </Route>
       </Routes>

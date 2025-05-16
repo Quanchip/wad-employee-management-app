@@ -1,4 +1,5 @@
 import Task from '../models/Task.js'
+import Employee from '../models/Employee.js'
 const addTask = async (req, res) => {
   try {
     const { task_name, description } = req.body
@@ -46,9 +47,22 @@ const getTasks = async (req, res) => {
 
 const getTask = async (req, res) => {
   try {
-    const { id } = req.params
-    const task = await Task.findById({ _id: id })
-    return res.status(200).json({ success: true, task })
+    const { id, role } = req.params
+    let task;
+    if (role === "employee") {
+      const employee = await Employee.findOne({userId: id})
+      task = await Task.find({employeeId:employee._id})
+    } else {
+      task = await Task.findById({ _id: id }).populate({
+        path: 'employeeId',
+        populate: {
+          path: 'userId',
+          select: 'name',
+        },
+      })
+    }
+     
+    return res.status(200).json({ success: true,  task })
   } catch (error) {
     return res
       .status(500)
@@ -104,4 +118,5 @@ const assignTask = async (req, res) => {
       .json({ success: false, error: 'Server error during task assignment' })
   }
 }
+
 export { addTask, deleteTask, getTasks, updateTask, getTask, assignTask }
