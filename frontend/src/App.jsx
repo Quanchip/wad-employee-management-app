@@ -28,6 +28,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import AddTask from "./components/task/AddTask.jsx";
 import TaskList from "./components/task/TaskList.jsx";
+import EditTask from './components/task/EditTask.jsx'
+import AssignTask from './components/task/AssignTask.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -65,6 +67,8 @@ function App() {
           
           <Route path='add-task' element={<AddTask />} />
           <Route path='tasks' element={<TaskList />} />
+          <Route path='task/:id' element={<EditTask />} />
+          <Route path='task/assign/:id' element={<AssignTask />} />
         </Route>
         <Route
           path='/employee-dashboard'

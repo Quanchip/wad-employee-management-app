@@ -48,6 +48,7 @@ export const TaskButtons = ({ _id, onTaskDelete}) => {
       }
     }
   }
+
   return (
     <div className='flex space-x-3'>
       <button
@@ -63,6 +64,20 @@ export const TaskButtons = ({ _id, onTaskDelete}) => {
         onClick={() => handleDelete(_id)}
       >
         Delete
+      </button>
+
+      <button
+        className='px-3 py-1 bg-red-600 text-white'
+        onClick={() => navigate(`/admin-dashboard/task/assign/${_id}`)}
+      >
+        Assign
+      </button>
+
+      <button
+        className='px-3 py-1 bg-red-600 text-white'
+        onClick={() => navigate(`/admin-dashboard/task/${_id}`)}
+      >
+        View
       </button>
     </div>
   )
