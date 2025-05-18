@@ -72,6 +72,7 @@ export const TaskButtons = ({ _id, onTaskDelete }) => {
     }
   }
 
+
   return (
     <div className='flex space-x-3'>
       <button

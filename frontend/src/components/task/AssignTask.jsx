@@ -68,6 +68,7 @@ const AssignTask = () => {
   }
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
 
     try {
       const response = await axios.put(
@@ -81,6 +82,18 @@ const AssignTask = () => {
       )
 
       if (response.data.success) {
+        try {
+          const responeMail = await axios.post(`http://localhost:5000/api/mail/send-task-notify/${id}`,
+            task,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }
+          )
+        } catch (error) {
+          
+        }
         navigate('/admin-dashboard/tasks')
       }
     } catch (error) {
