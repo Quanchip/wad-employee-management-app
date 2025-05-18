@@ -10,7 +10,7 @@ const taskSchema = new mongoose.Schema({
   assignAt: {type:Date, default:null},
   returnAt: { type: Date, default: null },
   status: { type: String, default: 'no assign' },
-  complete: {type:String, default: 'No completed'},
+  complete: { type: Boolean, default: false }
 })
 
 const Task = mongoose.model('Task', taskSchema)

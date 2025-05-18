@@ -1,6 +1,9 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
-import { columnsforEmployee, TaskButtonsEmployee } from '../../utils/TaskHelper.jsx'
+import {
+  columnsforEmployee,
+  TaskButtonsEmployee,
+} from '../../utils/TaskHelper.jsx'
 import { Link, useParams } from 'react-router-dom'
 import DataTable from 'react-data-table-component'
 import { useAuth } from '../../context/authContext.jsx'
@@ -32,7 +35,21 @@ const TaskListEmployee = () => {
             _id: task._id,
             sno: sno++,
             task_name: task.task_name,
-            action: <TaskButtonsEmployee _id={task._id} onTaskUpdateComplete={onTaskUpdateComplete} />,
+            task_complete: (
+              <span
+                className={`text-2xl ${
+                  task.complete ? 'text-green-600' : 'text-red-600'
+                }`}
+              >
+                {task.complete ? '✅' : '❌'}
+              </span>
+            ),
+            action: (
+              <TaskButtonsEmployee
+                _id={task._id}
+                onTaskUpdateComplete={onTaskUpdateComplete}
+              />
+            ),
           }))
 
           setTasks(data)
@@ -65,7 +82,18 @@ const TaskListEmployee = () => {
   }
 
   const onTaskUpdateComplete = async (id) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id))
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task._id === id
+          ? {
+              ...task,
+              task_complete: (
+                <span className='text-2xl text-green-600'>✅</span>
+              ),
+            }
+          : task
+      )
+    )
   }
 
   return (

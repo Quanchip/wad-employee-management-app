@@ -48,10 +48,10 @@ const getTasks = async (req, res) => {
 const getTask = async (req, res) => {
   try {
     const { id, role } = req.params
-    let task;
-    if (role === "employee") {
-      const employee = await Employee.findOne({userId: id})
-      task = await Task.find({employeeId:employee._id})
+    let task
+    if (role === 'employee') {
+      const employee = await Employee.findOne({ userId: id })
+      task = await Task.find({ employeeId: employee._id })
     } else {
       task = await Task.findById({ _id: id }).populate({
         path: 'employeeId',
@@ -61,8 +61,8 @@ const getTask = async (req, res) => {
         },
       })
     }
-     
-    return res.status(200).json({ success: true,  task })
+
+    return res.status(200).json({ success: true, task })
   } catch (error) {
     return res
       .status(500)
@@ -119,4 +119,38 @@ const assignTask = async (req, res) => {
   }
 }
 
-export { addTask, deleteTask, getTasks, updateTask, getTask, assignTask }
+const markDone = async (req, res) => {
+  try {
+    console.log('✅ markDone controller called')
+    const { id } = req.params
+    const markdone = await Task.findByIdAndUpdate(
+      id,
+      { complete: true,
+        returnAt: new Date(),
+
+       },
+
+      { new: true }
+    )
+    if (!markdone) {
+      return res.status(404).json({ success: false, error: 'Task not found' })
+    }
+
+    return res.json({ success: true, task: markdone })
+  } catch (error) {
+    console.error('Error in markDone:', error)
+    return res
+      .status(500)
+      .json({ success: false, error: 'Internal server error' })
+  }
+}
+
+export {
+  addTask,
+  deleteTask,
+  getTasks,
+  updateTask,
+  getTask,
+  assignTask,
+  markDone,
+}

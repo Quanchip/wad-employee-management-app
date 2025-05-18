@@ -24,7 +24,6 @@ export const columns = [
   },
 ]
 
-
 export const columnsforEmployee = [
   {
     name: 'S NO',
@@ -33,6 +32,12 @@ export const columnsforEmployee = [
   {
     name: 'Task Name',
     selector: (row) => row.task_name,
+    sortable: true,
+  },
+
+  {
+    name: 'Completed',
+    selector: (row) => row.task_complete,
     sortable: true,
   },
 
@@ -102,12 +107,13 @@ export const TaskButtons = ({ _id, onTaskDelete }) => {
 
 export const TaskButtonsEmployee = ({ _id, onTaskUpdateComplete }) => {
   const navigate = useNavigate()
-  const handleAssign = async(_id) => {
+  const handleAssign = async (id) => {
     const confirm = window.confirm('Do you want to mark the task as completed?')
-    if(confirm) {
+    if (confirm) {
       try {
         const response = await axios.put(
-          `http://localhost:5000/api/task/emp/${id}`,
+          `http://localhost:5000/api/task/emp/markDone/${id}`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -117,9 +123,7 @@ export const TaskButtonsEmployee = ({ _id, onTaskUpdateComplete }) => {
         if (response.data.success) {
           onTaskUpdateComplete(id)
         }
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     }
   }
 
@@ -129,16 +133,15 @@ export const TaskButtonsEmployee = ({ _id, onTaskUpdateComplete }) => {
         className='px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded'
         onClick={() => handleAssign(_id)}
       >
-        Assign
+        Mark done
       </button>
 
       <button
         className='px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded'
-        onClick={() => navigate(`/admin-dashboard/task/view/${_id}`)}
+        onClick={() => navigate(`/employee-dashboard/task/view/${_id}`)}
       >
-        View
+        View Detail
       </button>
     </div>
   )
 }
-
