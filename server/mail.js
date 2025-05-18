@@ -10,14 +10,6 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-transporter.verify((err, success) => {
-  if (err) {
-    console.error('Kết nối SMTP thất bại:', err)
-  } else {
-    console.log('SMTP server sẵn sàng gửi mail')
-  }
-})
-
 export async function sendMail({ to, subject, text, html }) {
   try {
     const info = await transporter.sendMail({

@@ -58,7 +58,6 @@ const Add = () => {
       await axios.post(
         'http://localhost:5000/api/mail/send-new-password',
         {
-          email: personalEmail,
           password: newPassword,
           key: confirmationKey,
         },
@@ -81,13 +80,19 @@ const Add = () => {
         }
       )
 
-      if (response.data.success) {
-        alert('Employee added and email sent successfully!')
-        setShowEmailBox(false)
-        navigate('/admin-dashboard/employees')
-      } else {
-        alert('Failed to add employee')
-      }
+        if (response.data.success) {
+          alert('Employee added and email sent successfully!')
+          setShowEmailBox(false)
+          const setSessionClient = await axios.get(
+            'http://localhost:5000/api/mail/getSessionServer', {
+              withCredentials: true, 
+            }
+          )
+          sessionStorage.setItem('userEmail', setSessionClient.data.email) 
+          navigate('/admin-dashboard/employees')
+        } else {
+          alert('Failed to add employee')
+        }
     } catch (error) {
       if (error.response?.data?.error?.includes('already registered')) {
         alert('Employee already exists!')

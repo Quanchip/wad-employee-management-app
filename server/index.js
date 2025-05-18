@@ -19,15 +19,18 @@ const app = express();
 
 // Configure CORS to allow requests from the frontend
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-
-// Parse JSON request bodies
 app.use(express.json());
+// Parse JSON request bodies
 app.use(session({
-    secret: 'secret_key',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  }));
+  secret: 'secret_key',
+  resave: false,
+  saveUninitialized: false, 
+  cookie: {
+    secure: false,  
+    httpOnly: true, 
+    maxAge: 1000 * 60 * 15
+  }
+}))
 
 app.use(express.static('public/uploads'))
 app.use('/api/auth', authRouter)

@@ -58,4 +58,13 @@ router.post('/send-task-notify', async (req, res) => {
   }
 })
 
+router.get('/getSessionServer', async (req, res)=> {
+  try {
+    const email = req.session.userEmail
+    return res.status(200).json({message: 'Successfully take session from server', email})
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to get session from server' })
+  }
+})
+
 export default router
