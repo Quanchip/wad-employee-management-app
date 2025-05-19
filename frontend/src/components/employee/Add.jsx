@@ -49,21 +49,6 @@ const Add = () => {
     }
 
     try {
-      await axios.post(
-        'http://localhost:5000/api/mail/set-email',
-        { email: personalEmail },
-        { withCredentials: true }
-      )
-
-      await axios.post(
-        'http://localhost:5000/api/mail/send-new-password',
-        {
-          password: newPassword,
-          key: confirmationKey,
-        },
-        { withCredentials: true }
-      )
-
       const formDataObj = new FormData()
       Object.keys(formData).forEach((key) => {
         formDataObj.append(key, formData[key])
@@ -81,6 +66,21 @@ const Add = () => {
       )
 
       if (response.data.success) {
+        await axios.post(
+          'http://localhost:5000/api/mail/set-email',
+          { email: personalEmail },
+          { withCredentials: true }
+        )
+
+        await axios.post(
+          'http://localhost:5000/api/mail/send-new-password',
+          {
+            password: newPassword,
+            key: confirmationKey,
+          },
+          { withCredentials: true }
+        )
+
         alert('Employee added and email sent successfully!')
         setShowEmailBox(false)
         const setSessionClient = await axios.get(

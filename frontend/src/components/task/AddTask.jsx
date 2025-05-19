@@ -1,37 +1,40 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios"; 
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 const AddTask = () => {
-    const [task, setTask] = useState({
-        task_name:'',
-        description:''
+  const [task, setTask] = useState({
+    task_name: '',
+    description: '',
+  })
 
-    })
+  const navigate = useNavigate()
 
-    const navigate = useNavigate()
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setTask({ ...task, [name]: value })
+  }
 
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setTask({...task, [name] :value})
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        try {
-            const response = await axios.post('http://localhost:5000/api/task/add', task, {
-                headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            if (response.data.success) {
-                navigate("/admin-dashboard/tasks")
-            }
-        } catch (error) {
-            if(error.response && !error.response.data.success) {
-                alert(error.response.data.error)
-            }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/task/add',
+        task,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         }
+      )
+      if (response.data.success) {
+        navigate('/admin-dashboard/tasks')
+      }
+    } catch (error) {
+      if (error.response && !error.response.data.success) {
+        alert(error.response.data.error)
+      }
     }
+  }
   return (
     <div className='flex justify-center items-center min-h-screen bg-gray-100'>
       <div className='bg-white shadow-lg rounded-xl p-6 w-full max-w-md'>

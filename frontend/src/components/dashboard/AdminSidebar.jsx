@@ -110,6 +110,18 @@ const AdminSidebar = () => {
           <FaBuilding className="text-lg" />
           <span>Task</span>
         </NavLink>
+
+
+        <NavLink
+          to="/admin-dashboard/teams"
+          className={({ isActive }) =>
+            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
+          }
+          end
+        >
+          <FaBuilding className="text-lg" />
+          <span>Team</span>
+        </NavLink>
       </nav>
     </div>
   );

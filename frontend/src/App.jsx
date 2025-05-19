@@ -32,6 +32,9 @@ import EditTask from './components/task/EditTask.jsx'
 import AssignTask from './components/task/AssignTask.jsx'
 import ViewTask from './components/task/ViewTask.jsx'
 import TaskListEmployee from './components/task/TaskListEmployee.jsx'
+
+import TeamList from './components/team/TeamList.jsx'
+import AddTeam from './components/team/AddTeam.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -72,6 +75,9 @@ function App() {
           <Route path='task/:id' element={<EditTask />} />
           <Route path='task/assign/:id' element={<AssignTask />} />
           <Route path='task/view/:id' element={<ViewTask   />} />
+
+          <Route path='teams' element={<TeamList   />} />
+          <Route path='add-team' element={<AddTeam   />} />
         </Route>
         <Route
           path='/employee-dashboard'
