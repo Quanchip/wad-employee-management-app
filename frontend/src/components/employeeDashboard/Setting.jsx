@@ -13,6 +13,7 @@ const Setting = () => {
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
+    confirmKey: "",
   });
   const [error, setError] = useState(null);
 
@@ -41,7 +42,7 @@ const Setting = () => {
           setError("")
         }
       } catch (err) {
-        setError(error.response.data.error)
+        setError(err.response.data.error)
       }
   };
 
@@ -99,6 +100,23 @@ const Setting = () => {
             required
           />
         </div>
+
+         {/* Confirm Key */}
+         <div className="mb-4">
+          <label className="text-sm font-medium text-gray-700">
+            Confirm Key
+          </label>
+          <input
+            type="confirmKey"
+            name="confirmKey"
+            placeholder="Key"
+            onChange={handleChange}
+            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+
   
         <button
           type="submit"

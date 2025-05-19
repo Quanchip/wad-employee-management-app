@@ -41,12 +41,13 @@ const addEmployee = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10)
+    const hashKey = await bcrypt.hash(key,20)
 
     const newUser = new User({
       name,
       email,
       password: hashPassword,
-      key,
+      key: hashKey,
       role,
       profileImage: req.file ? req.file.filename : '',
     })
