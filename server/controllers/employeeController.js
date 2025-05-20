@@ -41,7 +41,7 @@ const addEmployee = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10)
-    const hashKey = await bcrypt.hash(key,10)
+    const hashKey = await bcrypt.hash(key, 10)
 
     const newUser = new User({
       name,
@@ -78,7 +78,7 @@ const addEmployee = async (req, res) => {
 const getEmployees = async (req, res) => {
   try {
     const employees = await Employee.find()
-      .populate('userId', '-password') // also good to exclude password
+      .populate('userId', '-password')
       .populate('department')
 
     res.status(200).json({ success: true, employees })
@@ -156,7 +156,10 @@ const updateEmployee = async (req, res) => {
 const fetchEmployeesByDepId = async (req, res) => {
   const { id } = req.params
   try {
-    const employees = await Employee.find({ department: id })
+    const employees = await Employee.find({ department: id }).populate({
+      path: 'userId',
+      select: 'name',
+    })
     return res.status(200).json({ success: true, employees })
   } catch (error) {
     return res

@@ -28,7 +28,7 @@ const getTeams = async (req, res) => {
       })
     return res.status(200).json({ success: true, teams })
   } catch (error) {
-    console.error('Lỗi getTeams:', error.message)
+    console.error('Error getTeams:', error.message)
     return res
       .status(500)
       .json({ success: false, error: 'Get team server error' })
@@ -53,5 +53,14 @@ const addTeammate = async (req, res) => {
   }
 }
 
-
-export { addTeam, getTeams, addTeammate }
+const deleteTeam =async(req,res)=>{
+  try {
+    const {id} = req.params
+    const deleteTeam = await Team.findById({_id:id})
+    await Team.deleteOne()
+    return res.status(200).json({ success: true, deleteTeam })
+  } catch (error) {
+    return res.status(500).json({ success: false, error: 'Error delete' })
+  }
+}
+export { addTeam, getTeams, addTeammate,deleteTeam }

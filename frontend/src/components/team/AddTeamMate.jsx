@@ -21,7 +21,6 @@ const AddTeammate = () => {
   const handleDepartmentChange = async (e) => {
     const emps = await getEmployees(e.target.value)
     setEmployees(emps)
-    setSelectedEmployees([]) // reset selection when department changes
   }
 
   const toggleEmployeeSelection = (empId) => {
@@ -93,7 +92,7 @@ const AddTeammate = () => {
                       className='mr-2'
                     />
                     <label htmlFor={emp._id}>
-                      {emp.employeeId} - {emp.name}
+                      {emp.employeeId} - {emp.userId?.name}
                     </label>
                   </div>
                 ))}
