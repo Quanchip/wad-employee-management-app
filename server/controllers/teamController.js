@@ -1,3 +1,4 @@
+import Employee from '../models/Employee.js'
 import Team from '../models/Team.js'
 const addTeam = async (req, res) => {
   try {
@@ -15,4 +16,42 @@ const addTeam = async (req, res) => {
   }
 }
 
-export { addTeam }
+const getTeams = async (req, res) => {
+  try {
+    const teams = await Team.find()
+      .populate({
+        path: 'leaderId',
+        populate: {
+          path: 'userId',
+          select: 'name',
+        },
+      })
+    return res.status(200).json({ success: true, teams })
+  } catch (error) {
+    console.error('Lỗi getTeams:', error.message)
+    return res
+      .status(500)
+      .json({ success: false, error: 'Get team server error' })
+  }
+}
+
+const addTeammate = async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id)
+    if (!team) return res.status(404).json({ success: false, error: 'Team not found' })
+
+    const newMembers = req.body.employeeIds.filter(
+      (id) => !team.employeeIds.includes(id)
+    )
+    team.employeeIds.push(...newMembers)
+    team.noOfMembers = team.employeeIds.length
+
+    await team.save()
+    res.status(200).json({ success: true, message: 'Members added successfully' })
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Server error' })
+  }
+}
+
+
+export { addTeam, getTeams, addTeammate }

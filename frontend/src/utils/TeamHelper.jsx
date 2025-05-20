@@ -75,7 +75,7 @@ export const TeamButtons = ({ _id, onTeamDelete }) => {
 
       <button
         className='px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded'
-        onClick={() => navigate(`/admin-dashboard/team/assign/${_id}`)}
+        onClick={() => navigate(`/admin-dashboard/add-teammate/${_id}`)}
       >
         Assign
       </button>

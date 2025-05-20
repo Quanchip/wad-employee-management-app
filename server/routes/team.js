@@ -1,9 +1,11 @@
 import express from 'express'
 import authMiddleware from '../middleware/authMiddleware.js'
-import { addTeam } from '../controllers/teamController.js'
+import { addTeam, addTeammate, getTeams } from '../controllers/teamController.js'
 
 const router = express.Router()
 
+router.get('/', authMiddleware, getTeams)
+router.put('/addTeammate/:id', authMiddleware, addTeammate)
 router.post('/add', authMiddleware, addTeam)
 
 export default router

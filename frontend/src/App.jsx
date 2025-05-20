@@ -35,6 +35,7 @@ import TaskListEmployee from './components/task/TaskListEmployee.jsx'
 
 import TeamList from './components/team/TeamList.jsx'
 import AddTeam from './components/team/AddTeam.jsx'
+import AddTeammate from './components/team/AddTeamMate.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -78,6 +79,8 @@ function App() {
 
           <Route path='teams' element={<TeamList   />} />
           <Route path='add-team' element={<AddTeam   />} />
+          <Route path='add-teammate/:id' element={<AddTeammate   />} />
+
         </Route>
         <Route
           path='/employee-dashboard'

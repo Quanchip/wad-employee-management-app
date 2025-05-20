@@ -26,7 +26,7 @@ const TeamList = () => {
             _id: team._id,
             sno: sno++,
             team_name: team.team_name,
-            leader_name: team.employeeId?.userId?.name,
+            leader_name: team.leaderId?.userId?.name,
             no_of_memebers: team.employeeIds?.length
               ? `${team.employeeIds.length} member(s)`
               : 'No Members',
