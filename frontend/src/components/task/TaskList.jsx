@@ -12,7 +12,7 @@ const TaskList = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-        setTaskLoading(true)
+      setTaskLoading(true)
       try {
         const response = await axios.get('http://localhost:5000/api/task', {
           headers: {
@@ -26,16 +26,16 @@ const TaskList = () => {
             _id: task._id,
             sno: sno++,
             task_name: task.task_name,
-            employee_name : task.employeeId?.userId?.name || "Unassigned",
-            action: (
-              <TaskButtons
-                _id={task._id}
-                onTaskDelete={onTaskDelete}
-              />
-            ),
+            task_for: task.task_for, // new
+            employee_name:
+              task.task_for === 'team'
+                ? 'Multiple / Team'
+                : task.employeeId?.userId?.name || 'Unassigned',
+            action: <TaskButtons _id={task._id} onTaskDelete={onTaskDelete} />,
           }))
 
           setTasks(data)
+          setFilteredTasks(data)
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
@@ -44,19 +44,22 @@ const TaskList = () => {
       } finally {
         setTaskLoading(false)
       }
-    };
+    }
+
     fetchTasks()
   }, [])
 
   useEffect(() => {
     if (searchQuery === '') {
-        setFilteredTasks(tasks)
+      setFilteredTasks(tasks)
     } else {
-        setFilteredTasks(
-            tasks.filter((task) => task.task_name.toLowerCase().includes(searchQuery))
+      setFilteredTasks(
+        tasks.filter((task) =>
+          task.task_name.toLowerCase().includes(searchQuery)
+        )
       )
     }
-  }, [tasks, searchQuery])
+  }, [searchQuery, tasks])
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value.toLowerCase())

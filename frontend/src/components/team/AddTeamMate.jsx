@@ -8,15 +8,35 @@ const AddTeammate = () => {
   const [departments, setDepartments] = useState([])
   const [employees, setEmployees] = useState([])
   const [selectedEmployees, setSelectedEmployees] = useState([])
+  const [currentTeamMemberIds, setCurrentTeamMemberIds] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
-    const getDepartments = async () => {
-      const departments = await fetchDepartments()
-      setDepartments(departments)
+    const fetchData = async () => {
+      try {
+        // Fetch departments
+        const depList = await fetchDepartments()
+        setDepartments(depList)
+
+        // Fetch team members
+        const res = await axios.get(`http://localhost:5000/api/team/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        if (res.data.success) {
+          const team = res.data.team
+          const memberIds = team.employeeIds.map((emp) => emp._id)
+          setSelectedEmployees(memberIds)
+          setCurrentTeamMemberIds(memberIds)
+        }
+      } catch (error) {
+        console.error('Error loading team or departments', error)
+      }
     }
-    getDepartments()
-  }, [])
+
+    fetchData()
+  }, [id])
 
   const handleDepartmentChange = async (e) => {
     const emps = await getEmployees(e.target.value)
@@ -35,7 +55,7 @@ const AddTeammate = () => {
     e.preventDefault()
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/team/addTeammate/${id}`,
+        `http://localhost:5000/api/team/updateEmployees/${id}`,
         { employeeIds: selectedEmployees },
         {
           headers: {
@@ -44,20 +64,19 @@ const AddTeammate = () => {
         }
       )
       if (response.data.success) {
-        alert('Teammates added successfully!')
+        alert('Team members updated successfully!')
         navigate('/admin-dashboard/teams')
       }
     } catch (error) {
-      alert(error.response?.data?.error || 'Error adding teammates.')
+      alert(error.response?.data?.error || 'Error updating teammates.')
     }
   }
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
       <div className='max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md'>
-        <h2 className='text-2xl font-bold mb-6'>Add Teammates to Team</h2>
+        <h2 className='text-2xl font-bold mb-6'>Manage Team Members</h2>
         <form onSubmit={handleSubmit}>
-          {/* Department select */}
           <div className='mb-4'>
             <label className='block font-medium mb-1'>Select Department</label>
             <select
@@ -74,11 +93,10 @@ const AddTeammate = () => {
             </select>
           </div>
 
-          {/* Employee checkbox list */}
           {employees.length > 0 && (
             <div className='mb-4'>
               <label className='block font-medium mb-2'>
-                Select Employees to Add
+                Select Employees to be in Team
               </label>
               <div className='border rounded p-3 max-h-64 overflow-y-auto bg-white'>
                 {employees.map((emp) => (
@@ -104,7 +122,7 @@ const AddTeammate = () => {
             type='submit'
             className='w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
           >
-            Add Teammates
+            Save Changes
           </button>
         </form>
       </div>

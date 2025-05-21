@@ -25,7 +25,7 @@ export const columns = [
     name: 'Number of Members',
     selector: (row) => row.no_of_memebers,
     sortable: true,
-    width: '180px',
+
   },
 
   {
@@ -88,13 +88,6 @@ export const TeamButtons = ({ _id, onTeamDelete }) => {
         onClick={() => navigate(`/admin-dashboard/team/view/${_id}`)}
       >
         View
-      </button>
-
-      <button
-        className='px-3 py-1 bg-pink-600 hover:bg-green-700 text-white rounded'
-        onClick={() => navigate(`/admin-dashboard/team/addingTeammate/${_id}`)}
-      >
-        Adding teammate
       </button>
     </div>
   )

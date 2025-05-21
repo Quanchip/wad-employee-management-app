@@ -120,4 +120,26 @@ const editTeam = async (req, res) => {
     return res.status(500).json({ success: false, error: 'Error update' })
   }
 }
-export { addTeam, getTeams, addTeammate, deleteTeam, getTeam, editTeam }
+
+const updateEmployees = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { employeeIds } = req.body
+
+    const team = await Team.findById(id)
+    if (!team) {
+      return res.status(404).json({ success: false, error: 'Team not found' })
+    }
+
+    team.employeeIds = employeeIds
+    team.noOfMembers = employeeIds.length
+    await team.save()
+
+    res.status(200).json({ success: true, message: 'Team members updated.' })
+  } catch (err) {
+    console.error('Error updating employees:', err)
+    res.status(500).json({ success: false, error: 'Server error' })
+  }
+}
+
+export { addTeam, getTeams, addTeammate, deleteTeam, getTeam, editTeam,updateEmployees  }

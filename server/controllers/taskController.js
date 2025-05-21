@@ -1,5 +1,6 @@
 import Task from '../models/Task.js'
 import Employee from '../models/Employee.js'
+import TaskForTeam from '../models/TaskForTeam.js'
 const addTask = async (req, res) => {
   try {
     const { task_name, description } = req.body
@@ -29,15 +30,25 @@ const deleteTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find().populate({
+    const personalTasks = await Task.find().populate({
       path: 'employeeId',
-      populate: {
-        path: 'userId',
-        select: 'name',
-      },
+      populate: { path: 'userId', select: 'name' },
     })
 
-    return res.status(200).json({ success: true, tasks })
+    const teamTasks = await TaskForTeam.find()
+
+    const combined = [
+      ...personalTasks.map((task) => ({
+        ...task.toObject(),
+        task_for: 'personal',
+      })),
+      ...teamTasks.map((task) => ({
+        ...task.toObject(),
+        task_for: 'team',
+      })),
+    ]
+
+    return res.status(200).json({ success: true, tasks: combined })
   } catch (error) {
     return res
       .status(500)
@@ -125,10 +136,7 @@ const markDone = async (req, res) => {
     const { id } = req.params
     const markdone = await Task.findByIdAndUpdate(
       id,
-      { complete: true,
-        returnAt: new Date(),
-
-       },
+      { complete: true, returnAt: new Date() },
 
       { new: true }
     )
@@ -145,6 +153,16 @@ const markDone = async (req, res) => {
   }
 }
 
+const addTaskForTeam = async (req, res) => {
+  try {
+    const newTask = new TaskForTeam(req.body)
+    await newTask.save()
+    res.json({ success: true, task: newTask })
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message })
+  }
+}
+
 export {
   addTask,
   deleteTask,
@@ -153,4 +171,5 @@ export {
   getTask,
   assignTask,
   markDone,
+  addTaskForTeam,
 }

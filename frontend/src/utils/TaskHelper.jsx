@@ -19,6 +19,12 @@ export const columns = [
   },
 
   {
+    name: 'Task For',
+    selector: (row) => (row.task_for === 'team' ? 'Team' : 'Personal'),
+    sortable: true,
+  },
+
+  {
     name: 'Action',
     selector: (row) => row.action,
   },
@@ -71,7 +77,6 @@ export const TaskButtons = ({ _id, onTaskDelete }) => {
       }
     }
   }
-
 
   return (
     <div className='flex space-x-3'>
