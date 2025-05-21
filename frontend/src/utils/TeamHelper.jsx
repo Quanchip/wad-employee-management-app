@@ -5,30 +5,33 @@ export const columns = [
   {
     name: 'S NO',
     selector: (row) => row.sno,
+    width: '100px',
   },
   {
     name: 'Team Name',
     selector: (row) => row.team_name,
     sortable: true,
+    width: '200px',
   },
 
   {
     name: 'Leader Name',
     selector: (row) => row.leader_name,
     sortable: true,
+    width: '240px',
   },
 
   {
     name: 'Number of Members',
     selector: (row) => row.no_of_memebers,
     sortable: true,
+    width: '180px',
   },
-
-
 
   {
     name: 'Action',
     selector: (row) => row.action,
+    width: '500px',
   },
 ]
 
@@ -77,7 +80,7 @@ export const TeamButtons = ({ _id, onTeamDelete }) => {
         className='px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded'
         onClick={() => navigate(`/admin-dashboard/add-teammate/${_id}`)}
       >
-        Assign
+        Adding teammate
       </button>
 
       <button
@@ -86,8 +89,9 @@ export const TeamButtons = ({ _id, onTeamDelete }) => {
       >
         View
       </button>
+
       <button
-        className='px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded'
+        className='px-3 py-1 bg-pink-600 hover:bg-green-700 text-white rounded'
         onClick={() => navigate(`/admin-dashboard/team/addingTeammate/${_id}`)}
       >
         Adding teammate

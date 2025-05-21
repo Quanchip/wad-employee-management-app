@@ -18,14 +18,13 @@ const addTeam = async (req, res) => {
 
 const getTeams = async (req, res) => {
   try {
-    const teams = await Team.find()
-      .populate({
-        path: 'leaderId',
-        populate: {
-          path: 'userId',
-          select: 'name',
-        },
-      })
+    const teams = await Team.find().populate({
+      path: 'leaderId',
+      populate: {
+        path: 'userId',
+        select: 'name',
+      },
+    })
     return res.status(200).json({ success: true, teams })
   } catch (error) {
     console.error('Error getTeams:', error.message)
@@ -38,7 +37,8 @@ const getTeams = async (req, res) => {
 const addTeammate = async (req, res) => {
   try {
     const team = await Team.findById(req.params.id)
-    if (!team) return res.status(404).json({ success: false, error: 'Team not found' })
+    if (!team)
+      return res.status(404).json({ success: false, error: 'Team not found' })
 
     const newMembers = req.body.employeeIds.filter(
       (id) => !team.employeeIds.includes(id)
@@ -47,20 +47,77 @@ const addTeammate = async (req, res) => {
     team.noOfMembers = team.employeeIds.length
 
     await team.save()
-    res.status(200).json({ success: true, message: 'Members added successfully' })
+    res
+      .status(200)
+      .json({ success: true, message: 'Members added successfully' })
   } catch (err) {
     res.status(500).json({ success: false, error: 'Server error' })
   }
 }
 
-const deleteTeam =async(req,res)=>{
+const deleteTeam = async (req, res) => {
   try {
-    const {id} = req.params
-    const deleteTeam = await Team.findById({_id:id})
-    await Team.deleteOne()
-    return res.status(200).json({ success: true, deleteTeam })
+    const { id } = req.params
+    const deletedTeam = await Team.findByIdAndDelete(id)
+
+    if (!deletedTeam) {
+      return res.status(404).json({ success: false, error: 'Team not found' })
+    }
+
+    return res.status(200).json({ success: true, deletedTeam })
   } catch (error) {
-    return res.status(500).json({ success: false, error: 'Error delete' })
+    console.error('Error deleting team:', error)
+    return res
+      .status(500)
+      .json({ success: false, error: 'Error deleting team' })
   }
 }
-export { addTeam, getTeams, addTeammate,deleteTeam }
+
+const getTeam = async (req, res) => {
+  try {
+    const { id } = req.params
+    const team = await Team.findById(id)
+      .populate({
+        path: 'leaderId',
+        populate: { path: 'userId', select: 'name email' },
+      })
+      .populate({
+        path: 'employeeIds',
+        populate: { path: 'userId', select: 'name' },
+      })
+      
+
+    if (!team)
+      return res.status(404).json({ success: false, error: 'Team not found' })
+
+    return res.status(200).json({ success: true, team })
+  } catch (error) {
+    console.error('Error fetching team:', error)
+    return res.status(500).json({ success: false, error: 'Error fetching' })
+  }
+}
+
+const editTeam = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { team_name, leaderId } = req.body
+    console.log('Edit team request:', id, team_name, leaderId)
+
+    const updatedTeam = await Team.findByIdAndUpdate(
+      { _id: id },
+      {
+        team_name,
+        leaderId,
+      },
+      { new: true }
+    )
+
+    if (!updatedTeam) {
+      return res.status(404).json({ success: false, error: 'Team not found' })
+    }
+    return res.status(200).json({ success: true, updatedTeam })
+  } catch (error) {
+    return res.status(500).json({ success: false, error: 'Error update' })
+  }
+}
+export { addTeam, getTeams, addTeammate, deleteTeam, getTeam, editTeam }

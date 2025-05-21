@@ -36,6 +36,8 @@ import TaskListEmployee from './components/task/TaskListEmployee.jsx'
 import TeamList from './components/team/TeamList.jsx'
 import AddTeam from './components/team/AddTeam.jsx'
 import AddTeammate from './components/team/AddTeamMate.jsx'
+import EditTeam from './components/team/Edit.jsx'
+import ViewTeam from './components/team/ViewTeam.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -80,6 +82,9 @@ function App() {
           <Route path='teams' element={<TeamList   />} />
           <Route path='add-team' element={<AddTeam   />} />
           <Route path='add-teammate/:id' element={<AddTeammate   />} />
+          <Route path='team/:id' element={<EditTeam   />} />
+          <Route path='team/view/:id' element={<ViewTeam   />} />
+
 
         </Route>
         <Route

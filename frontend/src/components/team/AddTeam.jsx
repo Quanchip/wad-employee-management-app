@@ -108,7 +108,7 @@ const AddTeam = () => {
                     <option value=''>Select Leader</option>
                     {employees.map((emp) => (
                       <option key={emp._id} value={emp._id}>
-                        {emp.employeeId}
+                        {emp.employeeId} - {emp.userId?.name}
                       </option>
                     ))}
                   </select>
