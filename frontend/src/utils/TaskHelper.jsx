@@ -53,27 +53,28 @@ export const columnsforEmployee = [
   },
 ]
 
-export const TaskButtons = ({ _id, onTaskDelete }) => {
+export const TaskButtons = ({ _id, task_for, onTaskDelete }) => {
   const navigate = useNavigate()
   const handleDelete = async (id) => {
     const confirm = window.confirm('Do you want to delete')
     if (confirm) {
       try {
-        const response = await axios.delete(
-          `http://localhost:5000/api/task/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        )
+        const url =
+          task_for === 'team'
+            ? `http://localhost:5000/api/task/team/${id}`
+            : `http://localhost:5000/api/task/${id}`
+
+        const response = await axios.delete(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+
         if (response.data.success) {
           onTaskDelete(id)
         }
       } catch (error) {
-        if (error.response && !error.response.data.success) {
-          alert(error.response.data.error)
-        }
+        alert(error?.response?.data?.error || 'Delete failed')
       }
     }
   }
@@ -82,7 +83,7 @@ export const TaskButtons = ({ _id, onTaskDelete }) => {
     <div className='flex space-x-3'>
       <button
         className='px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded'
-        onClick={() => navigate(`/admin-dashboard/task/${_id}`)}
+        onClick={() => navigate(`/admin-dashboard/task/${task_for}/${_id}`)}
       >
         Edit
       </button>
@@ -93,17 +94,24 @@ export const TaskButtons = ({ _id, onTaskDelete }) => {
       >
         Delete
       </button>
-
       <button
         className='px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded'
-        onClick={() => navigate(`/admin-dashboard/task/assign/${_id}`)}
+        onClick={() =>
+          navigate(
+            task_for === 'team'
+              ? `/admin-dashboard/task/assign/team/${_id}`
+              : `/admin-dashboard/task/assign/${_id}`
+          )
+        }
       >
         Assign
       </button>
 
       <button
         className='px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded'
-        onClick={() => navigate(`/admin-dashboard/task/view/${_id}`)}
+        onClick={() =>
+          navigate(`/admin-dashboard/task/view/${task_for}/${_id}`)
+        }
       >
         View
       </button>

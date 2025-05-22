@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 const teamSchema = new mongoose.Schema({
   team_name: { type: String, required: true },
-  leaderId: { type: Schema.Types.ObjectId, ref: 'Employee', required: true },
+  leaderId: { type: Schema.Types.ObjectId, ref: 'Employee', required: null },
   employeeIds: [
     { type: Schema.Types.ObjectId, ref: 'Employee', default: null },
   ],

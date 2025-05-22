@@ -38,6 +38,7 @@ import AddTeam from './components/team/AddTeam.jsx'
 import AddTeammate from './components/team/AddTeamMate.jsx'
 import EditTeam from './components/team/Edit.jsx'
 import ViewTeam from './components/team/ViewTeam.jsx'
+import AssignTaskForTeam from './components/task/AssignTaskForTeam.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -75,9 +76,10 @@ function App() {
           
           <Route path='add-task' element={<AddTask />} />
           <Route path='tasks' element={<TaskList />} />
-          <Route path='task/:id' element={<EditTask />} />
+          <Route path='task/:task_for/:id' element={<EditTask />} />
           <Route path='task/assign/:id' element={<AssignTask />} />
-          <Route path='task/view/:id' element={<ViewTask   />} />
+          <Route path='task/view/:task_for/:id' element={<ViewTask   />} />
+          <Route path='task/assign/team/:id' element={<AssignTaskForTeam   />} />
 
           <Route path='teams' element={<TeamList   />} />
           <Route path='add-team' element={<AddTeam   />} />

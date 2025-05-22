@@ -90,6 +90,25 @@ const updateTask = async (req, res) => {
       {
         task_name,
         description,
+        deadlineAt,
+      }
+    )
+    return res.status(200).json({ success: true, udpateTask })
+  } catch (error) {
+    return res.status(500).json({ success: false, error: 'Error update' })
+  }
+}
+
+const updateTaskForTeam = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { task_name, description } = req.body
+    const udpateTask = await Task.findByIdAndUpdate(
+      { _id: id },
+      {
+        task_name,
+        description,
+        deadlineAt,
       }
     )
     return res.status(200).json({ success: true, udpateTask })
@@ -163,6 +182,82 @@ const addTaskForTeam = async (req, res) => {
   }
 }
 
+const deleteTeamTask = async (req, res) => {
+  try {
+    const { id } = req.params
+    const deletedTask = await TaskForTeam.findByIdAndDelete(id)
+    if (!deletedTask) {
+      return res.status(404).json({ success: false, error: 'Task not found' })
+    }
+    return res.status(200).json({ success: true, task: deletedTask })
+  } catch (error) {
+    return res.status(500).json({ success: false, error: 'Delete error' })
+  }
+}
+const getTaskforTeam = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const task = await TaskForTeam.findById(id).populate({
+      path: 'teamId',
+      select: 'team_name leaderId',
+      populate: {
+        path: 'leaderId',
+        select: 'userId',
+        populate: {
+          path: 'userId',
+          select: 'name',
+        },
+      },
+    })
+
+    if (!task) {
+      return res.status(404).json({ success: false, error: 'Task not found' })
+    }
+    return res.status(200).json({ success: true, task })
+  } catch (error) {
+    console.error('❌ getTaskforTeam error:', error)
+    console.error(error.stack) // thêm dòng này
+    return res
+      .status(500)
+      .json({ success: false, error: 'Error fetching team task' })
+  }
+}
+
+const assignTaskForTeam = async (req, res) => {
+  try {
+    const { id } = req.params
+    console.log('Task ID from URL:', id)
+
+    const { teamId, assignAt, deadlineAt } = req.body
+    if (!teamId || !assignAt || !deadlineAt) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields: teamId, assignAt, deadlineAt', 
+      })
+    }
+    const updatedTaskForTeam = await TaskForTeam.findByIdAndUpdate(
+      id,
+      {
+        teamId,
+        assignAt,
+        deadlineAt,
+        status: 'Assigned',
+        updatedAt: new Date(),
+      },
+      { new: true }
+    )
+    if (!updatedTaskForTeam) {
+      return res.status(404).json({ success: false, error: 'Task not found' })
+    }
+    return res.json({ success: true, task: updatedTaskForTeam })
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, error: 'Server error during task assignment' })
+  }
+}
+
 export {
   addTask,
   deleteTask,
@@ -172,4 +267,8 @@ export {
   assignTask,
   markDone,
   addTaskForTeam,
+  deleteTeamTask,
+  getTaskforTeam,
+  assignTaskForTeam,
+  updateTaskForTeam
 }

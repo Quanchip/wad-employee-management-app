@@ -3,20 +3,22 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 const ViewTask = () => {
-  const { id } = useParams()
+  const { task_for, id } = useParams()
   const [task, setTask] = useState(null)
 
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/task/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        )
+        const url =
+          task_for === 'team'
+            ? `http://localhost:5000/api/task/team/${id}`
+            : `http://localhost:5000/api/task/${id}`
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
 
         if (response.data.success) {
           setTask(response.data.task)
@@ -30,7 +32,7 @@ const ViewTask = () => {
     }
 
     fetchTask()
-  }, [id])
+  }, [id, task_for])
 
   if (!task) {
     return <div className='text-center mt-20 text-xl'>Loading ...</div>
@@ -47,8 +49,14 @@ const ViewTask = () => {
           <DetailRow label='Task Name' value={task.task_name} />
           <DetailRow label='Description' value={task.description} />
           <DetailRow
-            label='Assigned Employee'
-            value={task.employeeId?.userId?.name || 'No employee assigned'}
+            label={task_for === 'team' ? 'Assigned Team' : 'Assigned Employee'}
+            value={
+              task_for === 'team'
+                ? `${task.teamId?.team_name || 'No team assigned'} - Leader: ${
+                    task.teamId?.leaderId?.userId?.name || 'No leader'
+                  }`
+                : task.employeeId?.userId?.name || 'No employee assigned'
+            }
           />
           <DetailRow
             label='Assign At'

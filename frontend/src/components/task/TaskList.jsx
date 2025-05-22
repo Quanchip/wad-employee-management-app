@@ -31,7 +31,13 @@ const TaskList = () => {
               task.task_for === 'team'
                 ? 'Multiple / Team'
                 : task.employeeId?.userId?.name || 'Unassigned',
-            action: <TaskButtons _id={task._id} onTaskDelete={onTaskDelete} />,
+            action: (
+              <TaskButtons
+                _id={task._id}
+                task_for={task.task_for}
+                onTaskDelete={onTaskDelete}
+              />
+            ),
           }))
 
           setTasks(data)
