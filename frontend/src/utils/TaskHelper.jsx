@@ -40,16 +40,14 @@ export const columnsforEmployee = [
     selector: (row) => row.task_name,
     sortable: true,
   },
-
-  {
-    name: 'Task For',
-    selector: (row) => (row.task_for === 'team' ? 'Team' : 'Personal'),
-    sortable: true,
-  },
-
   {
     name: 'Completed',
-    selector: (row) => row.task_complete,
+    selector: (row) =>
+      row.complete ? (
+        <span className='text-2xl text-green-600'>✅</span>
+      ) : (
+        <span className='text-2xl text-red-600'>❌</span>
+      ),
     sortable: true,
   },
 
@@ -129,17 +127,19 @@ export const TaskButtonsEmployee = ({
   _id,
   onTaskUpdateComplete,
   task_for,
+  isLeader,
 }) => {
   const navigate = useNavigate()
-  const handleAssign = async (id) => {
+
+  const handleMarkDone = async (id) => {
     const confirm = window.confirm('Do you want to mark the task as completed?')
     if (confirm) {
       try {
         const url =
           task_for === 'team'
-            ? `http://localhost:5000/api/task/team/emp/markDone/${id}`
+            ? `http://localhost:5000/api/task/team/markDone/${id}`
             : `http://localhost:5000/api/task/emp/markDone/${id}`
-
+        console.log(task_for)
         const response = await axios.put(
           url,
           {},
@@ -158,14 +158,19 @@ export const TaskButtonsEmployee = ({
     }
   }
 
+  const canMarkDone =
+    task_for === 'personal' || (task_for === 'team' && isLeader === true)
+
   return (
     <div className='flex space-x-3'>
-      <button
-        className='px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded'
-        onClick={() => handleAssign(_id)}
-      >
-        Mark done
-      </button>
+      {canMarkDone && (
+        <button
+          className='px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded'
+          onClick={() => handleMarkDone(_id)}
+        >
+          Mark done
+        </button>
+      )}
 
       <button
         className='px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded'

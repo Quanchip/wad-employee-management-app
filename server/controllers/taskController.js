@@ -1,6 +1,7 @@
 import Task from '../models/Task.js'
 import Employee from '../models/Employee.js'
 import TaskForTeam from '../models/TaskForTeam.js'
+import Team from '../models/Team.js'
 const addTask = async (req, res) => {
   try {
     const { task_name, description } = req.body
@@ -81,6 +82,44 @@ const getTask = async (req, res) => {
   }
 }
 
+const getTaskPerson = async (req, res) => {
+  try {
+    const { id } = req.params
+    let task
+    const employee = await Employee.findOne({ userId: id })
+    task = await Task.find({ employeeId: employee._id })
+    return res.status(200).json({ success: true, task })
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, error: 'Error fetching data task' })
+  }
+}
+
+const getTaskTeamPerson = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const employee = await Employee.findOne({ userId: id })
+    const team = await Team.findOne({
+      $or: [{ leaderId: employee._id }, { employeeIds: employee._id }],
+    })
+    if (!team) {
+      return res
+        .status(404)
+        .json({ success: false, error: 'Team not found for this employee' })
+    }
+
+    const task = await TaskForTeam.find({ teamId: team._id })
+    return res.status(200).json({ success: true, task })
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(500)
+      .json({ success: false, error: 'Error fetching team tasks' })
+  }
+}
+
 const updateTask = async (req, res) => {
   try {
     const { id } = req.params
@@ -150,11 +189,34 @@ const assignTask = async (req, res) => {
   }
 }
 
-const markDone = async (req, res) => {
+const markDoneEmp = async (req, res) => {
   try {
     console.log('✅ markDone controller called')
     const { id } = req.params
     const markdone = await Task.findByIdAndUpdate(
+      id,
+      { complete: true, returnAt: new Date() },
+
+      { new: true }
+    )
+    if (!markdone) {
+      return res.status(404).json({ success: false, error: 'Task not found' })
+    }
+
+    return res.json({ success: true, task: markdone })
+  } catch (error) {
+    console.error('Error in markDone:', error)
+    return res
+      .status(500)
+      .json({ success: false, error: 'Internal server error' })
+  }
+}
+
+const markDoneTeam = async (req, res) => {
+  try {
+    console.log('✅ markDone controller called')
+    const { id } = req.params
+    const markdone = await TaskForTeam.findByIdAndUpdate(
       id,
       { complete: true, returnAt: new Date() },
 
@@ -266,10 +328,13 @@ export {
   updateTask,
   getTask,
   assignTask,
-  markDone,
+  markDoneEmp,
+  markDoneTeam,
   addTaskForTeam,
   deleteTeamTask,
   getTaskforTeam,
   assignTaskForTeam,
   updateTaskForTeam,
+  getTaskPerson,
+  getTaskTeamPerson,
 }

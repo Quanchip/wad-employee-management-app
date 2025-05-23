@@ -4,66 +4,96 @@ import {
   columnsforEmployee,
   TaskButtonsEmployee,
 } from '../../utils/TaskHelper.jsx'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import DataTable from 'react-data-table-component'
-import { useAuth } from '../../context/authContext.jsx'
 
 const TaskListEmployee = () => {
   const [tasks, setTasks] = useState([])
   const [taskloading, setTaskLoading] = useState(false)
   const [filteredTasks, setFilteredTasks] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
-  const { user } = useAuth()
+  const [taskType, setTaskType] = useState('personalTask')
   const { id } = useParams()
-  let sno = 1
-  useEffect(() => {
-    const fetchTasks = async () => {
-      setTaskLoading(true)
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/task/${id}/${user.role}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        )
+  const [isLeader, setIsLeader] = useState(false)
 
-        if (response.data.success) {
-          let sno = 1
-          const data = response.data.task.map((task) => ({
+  const fetchTasks = async () => {
+    setTaskLoading(true)
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.get(
+        `http://localhost:5000/api/task/${taskType}/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      if (response.data.success) {
+        let sno = 1
+        const data = response.data.task.map((task) => {
+          const task_for = taskType === 'teamTask' ? 'team' : 'personal'
+          return {
             _id: task._id,
             sno: sno++,
             task_name: task.task_name,
-            task_complete: (
-              <span
-                className={`text-2xl ${
-                  task.complete ? 'text-green-600' : 'text-red-600'
-                }`}
-              >
-                {task.complete ? '✅' : '❌'}
-              </span>
-            ),
+            complete: task.complete,
+            task_for,
+            isLeader,
             action: (
               <TaskButtonsEmployee
                 _id={task._id}
                 onTaskUpdateComplete={onTaskUpdateComplete}
+                task_for={task_for}
+                isLeader={isLeader}
               />
             ),
-          }))
+          }
+        })
+        setTasks(data)
+      }
+    } catch (error) {
+      if (error.response && !error.response.data.success) {
+        alert(error.response.data.error)
+      }
+    } finally {
+      setTaskLoading(false)
+    }
+  }
 
-          setTasks(data)
+  useEffect(() => {
+    fetchTasks()
+  }, [taskType, isLeader])
+
+
+  useEffect(() => {
+    const checkLeaderStatus = async () => {
+      if (taskType === 'teamTask') {
+        try {
+          const token = localStorage.getItem('token')
+          const response = await axios.get(
+            `http://localhost:5000/api/team/check-leader/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+
+          if (response.data.success) {
+            setIsLeader(response.data.isLeader)
+          }
+        } catch (error) {
+          console.error('Failed to check leader status', error)
+          setIsLeader(false)
         }
-      } catch (error) {
-        if (error.response && !error.response.data.success) {
-          alert(error.response.data.error)
-        }
-      } finally {
-        setTaskLoading(false)
+      } else {
+        setIsLeader(false)
       }
     }
-    fetchTasks()
-  }, [])
+
+    checkLeaderStatus()
+  }, [taskType, id])
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -87,7 +117,7 @@ const TaskListEmployee = () => {
         task._id === id
           ? {
               ...task,
-              task_complete: (
+              complete: (
                 <span className='text-2xl text-green-600'>✅</span>
               ),
             }
@@ -103,10 +133,35 @@ const TaskListEmployee = () => {
       ) : (
         <div className='p-6 bg-gray-50 min-h-screen'>
           <div className='p-5'>
-            <div className='text-center'>
+            <div className='text-center mb-4'>
               <h3 className='text-2xl font-bold'>Manage Tasks</h3>
             </div>
 
+            {/* Switch buttons */}
+            <div className='flex gap-3 mb-4 justify-center'>
+              <button
+                onClick={() => setTaskType('personalTask')}
+                className={`px-4 py-2 rounded ${
+                  taskType === 'personalTask'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200'
+                }`}
+              >
+                Personal Tasks
+              </button>
+              <button
+                onClick={() => setTaskType('teamTask')}
+                className={`px-4 py-2 rounded ${
+                  taskType === 'teamTask'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200'
+                }`}
+              >
+                Team Tasks
+              </button>
+            </div>
+
+            {/* Search */}
             <div className='flex justify-between items-center my-4'>
               <input
                 type='text'
@@ -117,6 +172,7 @@ const TaskListEmployee = () => {
               />
             </div>
 
+            {/* Data Table */}
             <div className='mt-5'>
               <DataTable
                 columns={columnsforEmployee}

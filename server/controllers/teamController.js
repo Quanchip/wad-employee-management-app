@@ -85,7 +85,6 @@ const getTeam = async (req, res) => {
         path: 'employeeIds',
         populate: { path: 'userId', select: 'name' },
       })
-      
 
     if (!team)
       return res.status(404).json({ success: false, error: 'Team not found' })
@@ -142,4 +141,30 @@ const updateEmployees = async (req, res) => {
   }
 }
 
-export { addTeam, getTeams, addTeammate, deleteTeam, getTeam, editTeam,updateEmployees  }
+const checkLeader = async (req, res) => {
+  try {
+    const userId = req.params.id
+
+    const employeeId = await Employee.findOne({ userId: userId })
+    const team = await Team.findOne({leaderId: employeeId})
+    if (team) {
+      return res.json({ success: true, isLeader: true })
+    } else {
+      return res.json({ success: true, isLeader: false })
+    }
+  } catch (error) {
+    console.error('Error checking leader status:', error)
+    return res.status(500).json({ success: false, error: 'Server error' })
+  }
+}
+
+export {
+  addTeam,
+  getTeams,
+  addTeammate,
+  deleteTeam,
+  getTeam,
+  editTeam,
+  updateEmployees,
+  checkLeader,
+}
