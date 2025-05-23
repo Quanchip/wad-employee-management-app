@@ -88,7 +88,7 @@ const AssignTaskForTeam = () => {
       if (response.data.success) {
         try {
           await axios.post(
-            `http://localhost:5000/api/mail/send-task-notify/${id}`,
+            `http://localhost:5000/api/mail/send-task-notify/team/${id}`,
             task,
             {
               headers: {

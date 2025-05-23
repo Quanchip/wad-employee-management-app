@@ -84,7 +84,7 @@ const getTask = async (req, res) => {
 const updateTask = async (req, res) => {
   try {
     const { id } = req.params
-    const { task_name, description } = req.body
+    const { task_name, description, deadlineAt } = req.body
     const udpateTask = await Task.findByIdAndUpdate(
       { _id: id },
       {
@@ -102,16 +102,17 @@ const updateTask = async (req, res) => {
 const updateTaskForTeam = async (req, res) => {
   try {
     const { id } = req.params
-    const { task_name, description } = req.body
-    const udpateTask = await Task.findByIdAndUpdate(
+    const { task_name, description, deadlineAt } = req.body
+    const updateTask = await TaskForTeam.findByIdAndUpdate(
       { _id: id },
       {
         task_name,
         description,
         deadlineAt,
-      }
+      },
+      { new: true }
     )
-    return res.status(200).json({ success: true, udpateTask })
+    return res.status(200).json({ success: true, updateTask })
   } catch (error) {
     return res.status(500).json({ success: false, error: 'Error update' })
   }
@@ -233,7 +234,7 @@ const assignTaskForTeam = async (req, res) => {
     if (!teamId || !assignAt || !deadlineAt) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: teamId, assignAt, deadlineAt', 
+        error: 'Missing required fields: teamId, assignAt, deadlineAt',
       })
     }
     const updatedTaskForTeam = await TaskForTeam.findByIdAndUpdate(
@@ -270,5 +271,5 @@ export {
   deleteTeamTask,
   getTaskforTeam,
   assignTaskForTeam,
-  updateTaskForTeam
+  updateTaskForTeam,
 }

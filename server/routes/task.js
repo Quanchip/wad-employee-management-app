@@ -11,7 +11,8 @@ import {
   addTaskForTeam,
   deleteTeamTask,
   getTaskforTeam,
-  assignTaskForTeam
+  assignTaskForTeam,
+  updateTaskForTeam,
 } from '../controllers/taskController.js'
 
 const router = express.Router()
@@ -24,9 +25,11 @@ router.post('/add', authMiddleware, addTask)
 router.put('/assign/team/:id', authMiddleware, assignTaskForTeam)
 router.put('/assign/:id', authMiddleware, assignTask)
 router.put('/emp/markDone/:id', authMiddleware, markDone)
+router.put('/team/:id', authMiddleware, updateTaskForTeam)
 
 router.get('/:id/:role', authMiddleware, getTask)
 router.get('/:id', authMiddleware, getTask)
+
 router.get('/', authMiddleware, getTasks)
 
 router.put('/:id', authMiddleware, updateTask)

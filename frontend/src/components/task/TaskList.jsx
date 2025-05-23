@@ -26,7 +26,7 @@ const TaskList = () => {
             _id: task._id,
             sno: sno++,
             task_name: task.task_name,
-            task_for: task.task_for, // new
+            task_for: task.task_for, 
             employee_name:
               task.task_for === 'team'
                 ? 'Multiple / Team'

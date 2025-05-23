@@ -42,6 +42,12 @@ export const columnsforEmployee = [
   },
 
   {
+    name: 'Task For',
+    selector: (row) => (row.task_for === 'team' ? 'Team' : 'Personal'),
+    sortable: true,
+  },
+
+  {
     name: 'Completed',
     selector: (row) => row.task_complete,
     sortable: true,
@@ -119,14 +125,23 @@ export const TaskButtons = ({ _id, task_for, onTaskDelete }) => {
   )
 }
 
-export const TaskButtonsEmployee = ({ _id, onTaskUpdateComplete }) => {
+export const TaskButtonsEmployee = ({
+  _id,
+  onTaskUpdateComplete,
+  task_for,
+}) => {
   const navigate = useNavigate()
   const handleAssign = async (id) => {
     const confirm = window.confirm('Do you want to mark the task as completed?')
     if (confirm) {
       try {
+        const url =
+          task_for === 'team'
+            ? `http://localhost:5000/api/task/team/emp/markDone/${id}`
+            : `http://localhost:5000/api/task/emp/markDone/${id}`
+
         const response = await axios.put(
-          `http://localhost:5000/api/task/emp/markDone/${id}`,
+          url,
           {},
           {
             headers: {
@@ -137,7 +152,9 @@ export const TaskButtonsEmployee = ({ _id, onTaskUpdateComplete }) => {
         if (response.data.success) {
           onTaskUpdateComplete(id)
         }
-      } catch (error) {}
+      } catch (error) {
+        alert(error?.response?.data?.error || 'Mark done failed')
+      }
     }
   }
 
@@ -152,7 +169,13 @@ export const TaskButtonsEmployee = ({ _id, onTaskUpdateComplete }) => {
 
       <button
         className='px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded'
-        onClick={() => navigate(`/employee-dashboard/task/view/${_id}`)}
+        onClick={() =>
+          navigate(
+            task_for === 'team'
+              ? `/employee-dashboard/task/view/team/${_id}`
+              : `/employee-dashboard/task/view/${_id}`
+          )
+        }
       >
         View Detail
       </button>

@@ -1,6 +1,7 @@
 import express from 'express'
 import { sendMail } from '../mail.js'
 import Task from '../models/Task.js'
+import TaskForTeam from '../models/TaskForTeam.js'
 const router = express.Router()
 
 router.post('/set-email', (req, res) => {
@@ -56,11 +57,11 @@ router.post('/send-new-password', async (req, res) => {
 })
 
 router.post('/send-task-notify/:id', async (req, res) => {
-  const {id} = req.params
-  const {task_name } = req.body
+  const { id } = req.params
+  const { task_name } = req.body
   if (!task_name)
     return res.status(400).json({ message: 'Email and task are required' })
-  const email = await Task.findById({_id:id}).populate({
+  const email = await Task.findById({ _id: id }).populate({
     path: 'employeeId',
     populate: {
       path: 'userId',
@@ -98,6 +99,65 @@ router.post('/send-task-notify/:id', async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Failed to send task notification' })
+  }
+})
+
+router.post('/send-task-notify/team/:id', async (req, res) => {
+  const { id } = req.params
+  const { task_name } = req.body
+
+  if (!task_name)
+    return res.status(400).json({ message: 'Task name is required' })
+
+  try {
+    const task = await TaskForTeam.findById(id).populate({
+      path: 'teamId',
+      select: 'leaderId',
+      populate: {
+        path: 'leaderId',
+        select: 'userId',
+        populate: {
+          path: 'userId',
+          select: 'email',
+        },
+      },
+    })
+
+    const leaderEmail = task?.teamId?.leaderId?.userId?.email
+
+    if (!leaderEmail) {
+      return res.status(400).json({ message: 'Leader email not found' })
+    }
+
+    await sendMail({
+      to: leaderEmail,
+      subject: '📌 New Task Assigned For Team: ' + task_name,
+      text: `Dear Employee,\n\nYou have been assigned a new task: ${task_name}.\nPlease check your task dashboard for details.\n\nBest regards,\nCompany Management`,
+      html: `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f4f6f8; color: #333;">
+          <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+            <div style="background-color: #004aad; color: white; padding: 16px 24px;">
+              <h2 style="margin: 0;">New Task Notification</h2>
+            </div>
+            <div style="padding: 24px;">
+              <p>Dear <strong>Team Leader</strong>,</p>
+              <p>Your team has been assigned a new task:</p>
+              <p style="font-size: 18px; font-weight: bold; color: #004aad; margin: 16px 0;">${task_name}</p>
+              <p>Please log in to the company portal to view task details.</p>
+              <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;">
+              <p style="font-size: 13px; color: #888;">If you have any questions, please contact your supervisor or the HR department.</p>
+              <p style="margin-top: 32px;">Best regards,<br><strong>Your Company Management Team</strong></p>
+            </div>
+          </div>
+          <p style="text-align: center; font-size: 12px; color: #999; margin-top: 24px;">© ${new Date().getFullYear()} Your Company. All rights reserved.</p>
+        </div>
+      `,
+    })
+
+    return res.json({ message: 'Task notification sent successfully' })
+  } catch (error) {
+    console.error('Error sending task notification:', error)
+    return res.status(500).json({ message: 'Failed to send task notification' })
   }
 })
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const EditTask = () => {
-  const { id } = useParams()
+  const { id, task_for } = useParams()
   const [task, setTask] = useState({
     task_name: '',
     description: '',
@@ -21,9 +21,15 @@ const EditTask = () => {
     const fetchTask = async () => {
       setLoading(true)
       try {
-        const res = await axios.get(`http://localhost:5000/api/task/${id}`, {
+        const url =
+          task_for === 'team'
+            ? `http://localhost:5000/api/task/team/${id}`
+            : `http://localhost:5000/api/task/${id}`
+
+        const res = await axios.get(url, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
+
         if (res.data.success) {
           const t = res.data.task
           setTask({
@@ -40,18 +46,20 @@ const EditTask = () => {
     }
 
     fetchTask()
-  }, [id])
+  }, [id, task_for])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.put(
-        `http://localhost:5000/api/task/${id}`,
-        task,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }
-      )
+      const url =
+        task_for === 'team'
+          ? `http://localhost:5000/api/task/team/${id}`
+          : `http://localhost:5000/api/task/${id}`
+
+      const res = await axios.put(url, task, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+
       if (res.data.success) {
         alert('Task updated successfully')
         navigate('/admin-dashboard/tasks')
