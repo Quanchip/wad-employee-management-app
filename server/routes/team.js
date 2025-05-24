@@ -13,7 +13,7 @@ import {
 
 const router = express.Router()
 router.get('/check-leader/:id', authMiddleware, checkLeader)
-router.get('/:id', authMiddleware, getTeam)
+router.get('/:id/:role', authMiddleware, getTeam)
 router.get('/', authMiddleware, getTeams)
 router.post('/add', authMiddleware, addTeam)
 router.put('/addTeammate/:id', authMiddleware, addTeammate)

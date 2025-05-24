@@ -30,6 +30,7 @@ router.put('/assign/:id', authMiddleware, assignTask)
 router.put('/emp/markDone/:id', authMiddleware, markDoneEmp)
 router.put('/team/markDone/:id', authMiddleware, markDoneTeam)
 router.put('/team/:id', authMiddleware, updateTaskForTeam)
+
 router.get('/personalTask/:id', authMiddleware, getTaskPerson)
 router.get('/teamTask/:id', authMiddleware, getTaskTeamPerson)
 router.get('/:id/:role', authMiddleware, getTask)

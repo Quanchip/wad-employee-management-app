@@ -175,10 +175,7 @@ export const TaskButtonsEmployee = ({
       <button
         className='px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded'
         onClick={() =>
-          navigate(
-            task_for === 'team'
-              ? `/employee-dashboard/task/view/team/${_id}`
-              : `/employee-dashboard/task/view/${_id}`
+          navigate(`/employee-dashboard/task/view/${task_for}/${_id}`
           )
         }
       >

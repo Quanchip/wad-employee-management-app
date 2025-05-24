@@ -52,6 +52,13 @@ const Sidebar = () => {
                     <FaCog className="text-lg" />
                     <span>Task</span>
                 </NavLink>
+
+
+                <NavLink to={`/employee-dashboard/team/${user._id}`}  className= {({isActive}) => `${isActive ? "bg-blue-500" : " "} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`}
+                    >
+                    <FaCog className="text-lg" />
+                    <span>Team</span>
+                </NavLink>
             </nav>
         </div>
     );

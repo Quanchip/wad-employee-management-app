@@ -75,19 +75,36 @@ const deleteTeam = async (req, res) => {
 
 const getTeam = async (req, res) => {
   try {
-    const { id } = req.params
-    const team = await Team.findById(id)
-      .populate({
-        path: 'leaderId',
-        populate: { path: 'userId', select: 'name email' },
-      })
-      .populate({
-        path: 'employeeIds',
-        populate: { path: 'userId', select: 'name' },
-      })
+    const { id, role } = req.params
+    let team
+    if (role === 'admin') {
+      team = await Team.findById(id)
+        .populate({
+          path: 'leaderId',
+          populate: { path: 'userId', select: 'name email' },
+        })
+        .populate({
+          path: 'employeeIds',
+          populate: { path: 'userId', select: 'name' },
+        })
 
-    if (!team)
-      return res.status(404).json({ success: false, error: 'Team not found' })
+      if (!team)
+        return res.status(404).json({ success: false, error: 'Team not found' })
+    } else {
+      const employee = await Employee.findOne({ userId: id })
+      team = await Team.find({
+        $or: [{ leaderId: employee._id }, { employeeIds: employee._id }],
+      }).populate([
+        {
+          path: 'leaderId',
+          populate: { path: 'userId', select: 'name email' },
+        },
+        {
+          path: 'employeeIds',
+          populate: { path: 'userId', select: 'name' },
+        },
+      ])
+    }
 
     return res.status(200).json({ success: true, team })
   } catch (error) {
@@ -146,7 +163,7 @@ const checkLeader = async (req, res) => {
     const userId = req.params.id
 
     const employeeId = await Employee.findOne({ userId: userId })
-    const team = await Team.findOne({leaderId: employeeId})
+    const team = await Team.findOne({ leaderId: employeeId })
     if (team) {
       return res.json({ success: true, isLeader: true })
     } else {

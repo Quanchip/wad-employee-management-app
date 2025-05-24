@@ -7,7 +7,6 @@ const teamSchema = new mongoose.Schema({
     { type: Schema.Types.ObjectId, ref: 'Employee', default: null },
   ],
   noOfMembers: { type: Number, default: 0 },
-  tasks: [{ type: Schema.Types.ObjectId, ref: 'TaskForTeam', default: [] }],
   key: { type: String, require: null },
 })
 

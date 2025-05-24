@@ -101,16 +101,26 @@ const getTaskTeamPerson = async (req, res) => {
     const { id } = req.params
 
     const employee = await Employee.findOne({ userId: id })
-    const team = await Team.findOne({
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, error: 'Employee not found' })
+    }
+
+    const teams = await Team.find({
       $or: [{ leaderId: employee._id }, { employeeIds: employee._id }],
     })
-    if (!team) {
+
+    if (!teams.length) {
       return res
         .status(404)
         .json({ success: false, error: 'Team not found for this employee' })
     }
 
-    const task = await TaskForTeam.find({ teamId: team._id })
+    const teamIds = teams.map((team) => team._id)
+
+    const task = await TaskForTeam.find({ teamId: { $in: teamIds } })
+
     return res.status(200).json({ success: true, task })
   } catch (error) {
     console.error(error)
@@ -280,7 +290,7 @@ const getTaskforTeam = async (req, res) => {
     return res.status(200).json({ success: true, task })
   } catch (error) {
     console.error('❌ getTaskforTeam error:', error)
-    console.error(error.stack) // thêm dòng này
+    console.error(error.stack)
     return res
       .status(500)
       .json({ success: false, error: 'Error fetching team task' })

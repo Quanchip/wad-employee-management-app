@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchDepartments, getEmployees } from '../../utils/EmployeeHelper.jsx'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAuth } from '../../context/authContext.jsx'
 
 const AddTeammate = () => {
   const { id } = useParams() // team id
@@ -9,6 +10,9 @@ const AddTeammate = () => {
   const [employees, setEmployees] = useState([])
   const [selectedEmployees, setSelectedEmployees] = useState([])
   const [currentTeamMemberIds, setCurrentTeamMemberIds] = useState([])
+  const { user } = useAuth()
+  const [leaderId, setLeaderId] = useState(null)
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -19,16 +23,20 @@ const AddTeammate = () => {
         setDepartments(depList)
 
         // Fetch team members
-        const res = await axios.get(`http://localhost:5000/api/team/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
+        const res = await axios.get(
+          `http://localhost:5000/api/team/${id}/${user.role}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
         if (res.data.success) {
           const team = res.data.team
           const memberIds = team.employeeIds.map((emp) => emp._id)
           setSelectedEmployees(memberIds)
           setCurrentTeamMemberIds(memberIds)
+          setLeaderId(team.leaderId?._id)
         }
       } catch (error) {
         console.error('Error loading team or departments', error)
@@ -99,21 +107,31 @@ const AddTeammate = () => {
                 Select Employees to be in Team
               </label>
               <div className='border rounded p-3 max-h-64 overflow-y-auto bg-white'>
-                {employees.map((emp) => (
-                  <div key={emp._id} className='flex items-center mb-2'>
-                    <input
-                      type='checkbox'
-                      id={emp._id}
-                      value={emp._id}
-                      checked={selectedEmployees.includes(emp._id)}
-                      onChange={() => toggleEmployeeSelection(emp._id)}
-                      className='mr-2'
-                    />
-                    <label htmlFor={emp._id}>
-                      {emp.employeeId} - {emp.userId?.name}
-                    </label>
-                  </div>
-                ))}
+                {employees.map((emp) => {
+                  const isLeader = emp._id === leaderId
+                  return (
+                    <div key={emp._id} className='flex items-center mb-2'>
+                      <input
+                        type='checkbox'
+                        id={emp._id}
+                        value={emp._id}
+                        checked={selectedEmployees.includes(emp._id) || emp._id === leaderId}
+                        disabled={isLeader}
+                        onChange={() => toggleEmployeeSelection(emp._id)}
+                        className='mr-2'
+                      />
+                      <label
+                        htmlFor={emp._id}
+                        className={
+                          isLeader ? 'text-gray-500 font-semibold' : ''
+                        }
+                      >
+                        {emp.employeeId} - {emp.userId?.name}{' '}
+                        {isLeader && '(Leader)'}
+                      </label>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}

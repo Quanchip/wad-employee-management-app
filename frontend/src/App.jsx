@@ -106,8 +106,9 @@ function App() {
           <Route path="/employee-dashboard/salary/:id" element={<ViewSalary />} />
           <Route path="/employee-dashboard/setting" element={<Setting />} />
           <Route path="/employee-dashboard/task/:id" element={<TaskListEmployee />} />
-          <Route path="/employee-dashboard/task/view/:id" element={<ViewTask />} />
+          <Route path="/employee-dashboard/task/view/:task_for/:id" element={<ViewTask />} />
 
+          <Route path="/employee-dashboard/team/:id" element={<ViewTeam />} />
 
         </Route>
       </Routes>
