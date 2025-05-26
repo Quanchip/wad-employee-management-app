@@ -26,6 +26,19 @@ import AttendanceReport from './components/attendance/AttendanceReport.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import AddTask from "./components/task/AddTask.jsx";
+import TaskList from "./components/task/TaskList.jsx";
+import EditTask from './components/task/EditTask.jsx'
+import AssignTask from './components/task/AssignTask.jsx'
+import ViewTask from './components/task/ViewTask.jsx'
+import TaskListEmployee from './components/task/TaskListEmployee.jsx'
+
+import TeamList from './components/team/TeamList.jsx'
+import AddTeam from './components/team/AddTeam.jsx'
+import AddTeammate from './components/team/AddTeamMate.jsx'
+import EditTeam from './components/team/Edit.jsx'
+import ViewTeam from './components/team/ViewTeam.jsx'
+import AssignTaskForTeam from './components/task/AssignTaskForTeam.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -60,6 +73,19 @@ function App() {
           <Route path="/admin-dashboard/setting" element={<Setting/>}></Route> 
           <Route path="/admin-dashboard/attendance" element={<Attendance/>}></Route>  
           <Route path="/admin-dashboard/attendance-report" element={<AttendanceReport/>}></Route>
+          
+          <Route path='add-task' element={<AddTask />} />
+          <Route path='tasks' element={<TaskList />} />
+          <Route path='task/:task_for/:id' element={<EditTask />} />
+          <Route path='task/assign/:id' element={<AssignTask />} />
+          <Route path='task/view/:task_for/:id' element={<ViewTask   />} />
+          <Route path='task/assign/team/:id' element={<AssignTaskForTeam   />} />
+
+          <Route path='teams' element={<TeamList   />} />
+          <Route path='add-team' element={<AddTeam   />} />
+          <Route path='add-teammate/:id' element={<AddTeammate   />} />
+          <Route path='team/:id' element={<EditTeam   />} />
+          <Route path='team/view/:id' element={<ViewTeam   />} />
 
 
         </Route>
@@ -79,6 +105,10 @@ function App() {
           <Route path="/employee-dashboard/add-leave/" element={<AddLeave />} />
           <Route path="/employee-dashboard/salary/:id" element={<ViewSalary />} />
           <Route path="/employee-dashboard/setting" element={<Setting />} />
+          <Route path="/employee-dashboard/task/:id" element={<TaskListEmployee />} />
+          <Route path="/employee-dashboard/task/view/:task_for/:id" element={<ViewTask />} />
+
+          <Route path="/employee-dashboard/team/:id" element={<ViewTeam />} />
 
         </Route>
       </Routes>

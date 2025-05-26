@@ -11,7 +11,7 @@ const Navbar = () => {
                 <FaUserCircle className="text-2xl text-blue-600" />
                 <div>
                     <p className="font-semibold text-lg text-gray-800">Welcome, {user?.name || "Guest"}!</p>
-                    <p className="text-sm text-gray-500">{user?.role || "User"}</p>
+                    {/* <p className="text-sm text-gray-500">{user?.role || "User"}</p> */}
                 </div>
             </div>
 
