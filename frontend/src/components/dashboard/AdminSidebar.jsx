@@ -1,107 +1,146 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaTachometerAlt, FaUser, FaBuilding, FaCalendarAlt, FaMoneyBillWave, FaCog, FaRegCalendarAlt } from 'react-icons/fa'; // Added FaRegCalendarAlt
-import { AiOutlineFileText } from 'react-icons/ai'; // Added AiOutlineFileText
+import { FaTachometerAlt, FaUsers, FaBuilding, FaCalendarAlt, FaMoneyBillWave, FaCog, FaChartLine, FaRegCalendarAlt } from 'react-icons/fa';
+import { useAuth } from '../../context/authContext';
+
 
 const AdminSidebar = () => {
-  return (
-    <div className="bg-gray-900 text-white h-screen w-64 fixed left-0 top-0">
-      {/* Full header background green */}
-      <div className="bg-blue-500 text-white text-center font-bold text-lg py-4">
-        Employee MS
-      </div>
+    const { user } = useAuth();
+    
+    return (
+        <div className="bg-white text-gray-800 h-screen w-64 fixed left-0 top-0 border-r shadow-sm">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center font-bold text-xl py-6">
+                Admin Panel
+            </div>
 
-      <nav className="flex flex-col space-y-4 mt-4">
-        <NavLink
-          to="/admin-dashboard"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end
-        >
-          <FaTachometerAlt className="text-lg" />
-          <span>Dashboard</span>
-        </NavLink>
+            <div className="p-4 border-b">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <FaUsers className="text-blue-600" />
+                    </div>
+                    <div>
+                        <p className="font-semibold text-sm">{user?.name}</p>
+                        <p className="text-xs text-gray-500">Administrator</p>
+                    </div>
+                </div>
+            </div>
 
-        <NavLink
-          to="/admin-dashboard/employees"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end
-        >
-          <FaUser className="text-lg" />
-          <span>Employee</span>
-        </NavLink>
+            <nav className="flex flex-col space-y-1 p-4">
+                <NavLink 
+                    to="/admin-dashboard" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                    end
+                >
+                    <FaTachometerAlt className="text-lg" />
+                    <span>Dashboard</span>
+                </NavLink>
 
-        <NavLink
-          to="/admin-dashboard/departments"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end
-        >
-          <FaBuilding className="text-lg" />
-          <span>Department</span>
-        </NavLink>
+                <NavLink 
+                    to="/admin-dashboard/employees" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                >
+                    <FaUsers className="text-lg" />
+                    <span>Employees</span>
+                </NavLink>
 
-        <NavLink
-          to="/admin-dashboard/leaves"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end
-        >
-          <FaCalendarAlt className="text-lg" />
-          <span>Leave</span>
-        </NavLink>
+                <NavLink 
+                    to="/admin-dashboard/departments" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                >
+                    <FaBuilding className="text-lg" />
+                    <span>Departments</span>
+                </NavLink>
 
-        <NavLink
-          to="/admin-dashboard/salary/add"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end
-        >
-          <FaMoneyBillWave className="text-lg" />
-          <span>Salary</span>
-        </NavLink>
+                <NavLink 
+                    to="/admin-dashboard/leaves" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                >
+                    <FaCalendarAlt className="text-lg" />
+                    <span>Leaves</span>
+                </NavLink>
 
-        <NavLink
-          to="/admin-dashboard/attendance"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end // Added end prop
-        >
-          <FaRegCalendarAlt />
-          <span>Attendance</span>
-        </NavLink>
+                <NavLink 
+                    to="/admin-dashboard/salary/add" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                >
+                    <FaMoneyBillWave className="text-lg" />
+                    <span>Salaries</span>
+                </NavLink>
 
-        <NavLink
-          to="/admin-dashboard/attendance-report"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end // Added end prop
-        >
-          <AiOutlineFileText />
-          <span>Attendance Report</span>
-        </NavLink>
+                <NavLink 
+                    to="/admin-dashboard/attendance" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                >
+                    <FaRegCalendarAlt className="text-lg" />
+                    <span>Attendance</span>
+                </NavLink>
 
-        <NavLink
-          to="/admin-dashboard/setting"
-          className={({ isActive }) =>
-            `${isActive ? 'bg-blue-500' : ''} flex items-center space-x-2 p-3 rounded-md hover:bg-gray-700`
-          }
-          end
-        >
-          <FaCog />
-          <span>Settings</span>
-        </NavLink>
-      </nav>
-    </div>
-  );
+                <NavLink 
+                    to="/admin-dashboard/attendance-report" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                >
+                    <FaChartLine className="text-lg" />
+                    <span>Attendance Reports</span>
+                </NavLink>
+
+                <NavLink 
+                    to="/admin-dashboard/setting" 
+                    className={({isActive}) => 
+                        `flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                            isActive 
+                                ? "bg-blue-50 text-blue-600" 
+                                : "text-gray-600 hover:bg-gray-50"
+                        }`
+                    }
+                >
+                    <FaCog className="text-lg" />
+                    <span>Settings</span>
+                </NavLink>
+            </nav>
+        </div>
+    );
 };
 
 export default AdminSidebar;

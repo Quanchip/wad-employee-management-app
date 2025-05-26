@@ -5,72 +5,142 @@ import bcrypt from 'bcrypt'
 import path from "path"
 import Department from '../models/Department.js' 
 
-
+// Configure multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "public/uploads")
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname))
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + path.extname(file.originalname))
     }
 }) 
 
-
-
-const upload = multer({storage: storage})
-
+// Configure multer upload
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only JPEG, PNG and GIF are allowed.'));
+        }
+    }
+})
 
 const addEmployee = async (req, res) => {
-    try{
-    const {
-        name,
-        email,
-        employeeId,
-        dob,
-        gender,
-        maritalStatus,
-        designation,
-        department,
-        salary,
-        password,
-        role,
-    } = req.body;
+    try {
+        console.log('Request body:', req.body);
+        console.log('Request file:', req.file);
 
-    const user = await User.findOne({email})
-    if(user) {
-        return res.status(400).json({success: false, error: "user already registered in empl"})
+        const {
+            name,
+            email,
+            employeeId,
+            dob,
+            gender,
+            maritalStatus,
+            designation,
+            department,
+            salary,
+            password,
+            role,
+        } = req.body;
+
+        // Validate required fields
+        if (!name || !email || !employeeId || !dob || !gender || !designation || !department || !salary || !password || !role) {
+            return res.status(400).json({
+                success: false,
+                error: "All fields are required"
+            });
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid email format"
+            });
+        }
+
+        // Check if email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                error: "Email already registered"
+            });
+        }
+
+        // Check if employeeId already exists
+        const existingEmployee = await Employee.findOne({ employeeId });
+        if (existingEmployee) {
+            return res.status(400).json({
+                success: false,
+                error: "Employee ID already exists"
+            });
+        }
+
+        // Hash password
+        const hashPassword = await bcrypt.hash(password, 10);
+
+        // Create new user
+        const newUser = new User({
+            name,
+            email,
+            password: hashPassword,
+            role,
+            profileImage: req.file ? req.file.filename : ""
+        });
+
+        const savedUser = await newUser.save();
+        console.log('Saved user:', savedUser);
+
+        // Create new employee
+        const newEmployee = new Employee({
+            userId: savedUser._id,
+            employeeId,
+            dob,
+            gender,
+            maritalStatus,
+            designation,
+            department,
+            salary
+        });
+
+        const savedEmployee = await newEmployee.save();
+        console.log('Saved employee:', savedEmployee);
+
+        return res.status(200).json({
+            success: true,
+            message: "Employee created successfully",
+            data: {
+                user: {
+                    _id: savedUser._id,
+                    name: savedUser.name,
+                    email: savedUser.email,
+                    role: savedUser.role
+                },
+                employee: {
+                    _id: savedEmployee._id,
+                    employeeId: savedEmployee.employeeId,
+                    designation: savedEmployee.designation
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('Error in addEmployee:', error);
+        return res.status(500).json({
+            success: false,
+            error: error.message || "Server error in adding employee"
+        });
     }
-
-    const hashPassword = await bcrypt.hash(password, 10)
-
-    const newUser = new User({
-        name,
-        email,
-        password: hashPassword,
-        role,
-        profileImage: req.file ? req.file.filename : ""
-    })
-    const savedUser = await newUser.save()
-
-    const newEmployee = new Employee({
-        userId: savedUser._id,
-        employeeId,
-        dob,
-        gender,
-        maritalStatus,
-        designation,
-        department,
-        salary
-    })
-
-    await newEmployee.save()
-    return res.status(200).json({success: true, message: "employee created"})
-
-    } catch (error){
-        console.log(error)
-        return res.status(500).json({success: false, error: "server error in adding employee"})
-    }
-
 }
 
 const getEmployees = async (req, res) => {
