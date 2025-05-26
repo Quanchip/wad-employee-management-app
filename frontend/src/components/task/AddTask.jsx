@@ -32,6 +32,7 @@ const AddTask = () => {
       })
 
       if (response.data.success) {
+        alert('Add task successfully!')
         navigate('/admin-dashboard/tasks')
       }
     } catch (error) {
