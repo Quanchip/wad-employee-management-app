@@ -13,34 +13,64 @@ import {
 const AdminSummary = () => {
     const [summary, setSummary] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         const fetchSummary = async() => {
             try {
+                console.log('Starting to fetch dashboard summary...');
                 setLoading(true)
-                const summary = await axios.get('http://localhost:5000/api/dashboard/summary', {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
-                setSummary(summary.data)
-            } catch(error) {
-                if(error.response) {
-                    alert(error.response.data.error)
+                setError(null)
+
+                const token = localStorage.getItem('token');
+                console.log('Token available:', !!token);
+                
+                if (!token) {
+                    throw new Error('No authentication token found');
                 }
-                console.log(error.message)
+
+                console.log('Making API call to dashboard summary...');
+                const response = await axios.get('http://localhost:5000/api/dashboard/summary', {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                
+                console.log('Dashboard summary response:', response.data);
+                if (response.data.success) {
+                    console.log('Setting summary data:', response.data);
+                    setSummary(response.data);
+                } else {
+                    throw new Error(response.data.error || 'Failed to fetch dashboard data');
+                }
+            } catch(error) {
+                console.error('Error fetching dashboard summary:', error);
+                if (error.response) {
+                    console.error('Error response data:', error.response.data);
+                    console.error('Error response status:', error.response.status);
+                }
+                setError(error.response?.data?.error || error.message || 'Failed to load dashboard data');
             } finally {
                 setLoading(false)
             }
         }
 
-        fetchSummary()
+        console.log('Initializing AdminSummary component...');
+        fetchSummary();
     }, [])
 
     if(loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        )
+    }
+
+    if(error) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <p className="text-red-500">Error: {error}</p>
             </div>
         )
     }
@@ -52,6 +82,8 @@ const AdminSummary = () => {
             </div>
         )
     }
+
+    console.log('Rendering dashboard with summary:', summary);
 
     return (
         <div className="p-6">

@@ -6,16 +6,15 @@ import { getEmployees } from '../../utils/EmployeeHelper.jsx';
 const Add = () => {
     const [salary, setSalary] = useState({
         employeeId: "",
-        basicSalary: 0,
-        allowances: 0,
-        deductions: 0,
+        basicSalary: "",
+        allowances: "",
+        deductions: "",
         payDate: "",
     });
 
     const [departments, setDepartments] = useState([]);
     const [employees, setEmployees] = useState([]);
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const getDepartments = async () => {
@@ -25,38 +24,55 @@ const Add = () => {
         getDepartments();
     }, []);
 
-  
-
     const handleDepartment = async (e) => {
         const emps = await getEmployees(e.target.value)
         setEmployees(emps);
     };
 
-
-   
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setSalary((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+
+        if (name === 'employeeId') {
+            const selectedEmp = employees.find(emp => emp._id === value);
+            setSalary(prev => ({
+                ...prev,
+                employeeId: value,
+                basicSalary: selectedEmp?.salary || 0, 
+            }));
+        } else {
+            setSalary(prev => ({
+                ...prev,
+                [name]: value,
+            }));
+
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('Submitting salary data:', salary);
+
+        // Convert string values to numbers
+        const salaryData = {
+            ...salary,
+            basicSalary: parseFloat(salary.basicSalary) || 0,
+            allowances: parseFloat(salary.allowances) || 0,
+            deductions: parseFloat(salary.deductions) || 0
+        };
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/salary/add`, salary, {
+            const response = await axios.post(`http://localhost:5000/api/salary/add`, salaryData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+            console.log('Salary add response:', response.data);
 
             if (response.data.success) {
                 navigate("/admin-dashboard/employees");
             }
         } catch (error) {
+            console.error('Error adding salary:', error);
             if (error.response && !error.response.data.success) {
                 alert(error.response.data.error);
             }
@@ -113,11 +129,13 @@ const Add = () => {
                                 <input
                                     type="number"
                                     name="basicSalary"
-                                    // value={salary.basicSalary}
+                                    value={salary.basicSalary}
                                     onChange={handleChange}
                                     placeholder="Basic Salary"
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                                     required
+                                    min="0"
+                                    step="0.01"
                                 />
                             </div>
 
@@ -127,11 +145,12 @@ const Add = () => {
                                 <input
                                     type="number"
                                     name="allowances"
-                                    // value={salary.allowance}
+                                    value={salary.allowances}
                                     onChange={handleChange}
-                                    placeholder="allowances"
+                                    placeholder="Allowances"
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-                                    required
+                                    min="0"
+                                    step="0.01"
                                 />
                             </div>
 
@@ -141,11 +160,12 @@ const Add = () => {
                                 <input
                                     type="number"
                                     name="deductions"
-                                    // value={salary.deductions}
+                                    value={salary.deductions}
                                     onChange={handleChange}
-                                    placeholder="deductions"
+                                    placeholder="Deductions"
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
-                                    required
+                                    min="0"
+                                    step="0.01"
                                 />
                             </div>
 
@@ -155,7 +175,7 @@ const Add = () => {
                                 <input
                                     type="date"
                                     name="payDate"
-                                    // value={salary.payDate}
+                                    value={salary.payDate}
                                     onChange={handleChange}
                                     className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                                     required
@@ -163,13 +183,13 @@ const Add = () => {
                             </div>
                         </div>
 
-                        {/* Edit Button */}
+                        {/* Submit Button */}
                         <div className="mt-6">
                             <button
                                 type="submit"
                                 className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md"
                             >
-                                Add Employee
+                                Add Salary
                             </button>
                         </div>
                     </form>

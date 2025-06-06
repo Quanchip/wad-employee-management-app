@@ -1,9 +1,12 @@
+
 import Attendance from '../models/Attendance.js'
 import Employee from '../models/Employee.js'
+
 
 // GET Today's Attendance
 const getAttendance = async (req, res) => {
   try {
+
     const date = new Date().toISOString().split('T')[0]
 
     const attendance = await Attendance.find({ date }).populate({
@@ -21,9 +24,11 @@ const getAttendance = async (req, res) => {
   }
 }
 
+
 // UPDATE Attendance for a specific employee and date
 const updateAttendance = async (req, res) => {
   try {
+
     const { employeeId } = req.params
     const { status } = req.body
     const date = new Date().toISOString().split('T')[0]
